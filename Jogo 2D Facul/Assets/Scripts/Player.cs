@@ -16,13 +16,15 @@ public class Player : MonoBehaviour
     //public Text TextLives;
     //public Text TextRings;
 
-    public bool isGrounded;
-    public bool canJump;
+    private bool isGrounded;
+    private bool canJump;
+    private bool canMove;
     //public bool inWater;
     //public bool inEscadas;
-    public bool isAttack;
+    private bool isAttack;
 
     //public GameObject lastCheckpoint;
+    private Animator animator;
 
     void Start()
     {
@@ -34,6 +36,7 @@ public class Player : MonoBehaviour
         
 
         GetComponent<CapsuleCollider2D>(); //Pegando o componete Collider2D
+        animator = GetComponent<Animator>();
 
     }
 
@@ -58,10 +61,10 @@ public class Player : MonoBehaviour
 
         if (movimento > 0 || movimento < 0) //Verificação se está andando
         {
-            GetComponent<Animator>().SetBool("walking", true); //Vai setar a animação booleana walking para true iniciando a animação
+            animator.SetBool("Walking", true); //Vai setar a animação booleana walking para true iniciando a animação
         }else
         {
-            GetComponent<Animator>().SetBool("walking", false); //Se não vai set a animação booleana walking para false parando a animação
+            animator.SetBool("Walking", false); //Se não vai set a animação booleana walking para false parando a animação
         }
 
         //Pular
@@ -73,31 +76,24 @@ public class Player : MonoBehaviour
                 //GetComponent<AudioSource>().Play();
                 canJump = true;
                 isGrounded = false;
-                GetComponent<Animator>().SetBool("jumping", true);
+                animator.SetBool("Jumping", true);
                 rigidbody.velocity = new Vector2(rigidbody.velocity.x, forcaPulo);
-                //Debug.Log(isGrounded);
+                Debug.Log(isGrounded);
             }
             else
             {
                 canJump = false;
-                GetComponent<Animator>().SetBool("jumping", false);
+                animator.SetBool("Jumping", false);
             }
         }
 
         //Atacar
-        if (Input.GetKey(KeyCode.Mouse0))
+        if (Input.GetButtonDown("Fire1"))
         {
-            //GetComponent<Animator>().SetTrigger("attack");
-            
-            if (isAttack == false)
+            if (movimento == 0)
             {
-                GetComponent<Animator>().SetBool("attacking", true);
-                isAttack = true;
-            }
-            else
-            {
-                GetComponent<Animator>().SetBool("attacking", false);
-                isAttack = false;
+                animator.SetTrigger("Attack");
+                canMove = false;
             }
 
             //Collider2D[] colliders = new Collider2D[3];
@@ -112,161 +108,161 @@ public class Player : MonoBehaviour
                     Destroy(colliders[i].gameObject);
                 }
             }*/
-
-
         }
+
+        
 
         //Debug.Log(movimento);
 
-            /*if (!inWater) //Se ele não tiver na água pode executar o bloco
+        /*if (!inWater) //Se ele não tiver na água pode executar o bloco
+        {
+            //Pular
+            if (Input.GetKeyDown(KeyCode.Space)) //Pegar a tecla do teclado espaço para pular
             {
-                //Pular
-                if (Input.GetKeyDown(KeyCode.Space)) //Pegar a tecla do teclado espaço para pular
+                if (isGrounded) //Se não estiver pulando
                 {
-                    if (isGrounded) //Se não estiver pulando
-                    {
-                        rigidbody.AddForce(new Vector2(0, forcaPulo)); //Pegando a fisica do personagem e adicionando uma força no eixo y
-                        GetComponent<AudioSource>().Play();
-                        canFly = false;
-
-                    }
-                    else
-                    {
-                        canFly = true;
-
-                    }
-                }
-
-                //Voando
-                if (canFly && Input.GetKey(KeyCode.Space))
-                {
-                    GetComponent<Animator>().SetBool("flying", true);
-                    rigidbody.velocity = new Vector2(rigidbody.velocity.x, -0.5f);
+                    rigidbody.AddForce(new Vector2(0, forcaPulo)); //Pegando a fisica do personagem e adicionando uma força no eixo y
+                    GetComponent<AudioSource>().Play();
+                    canFly = false;
 
                 }
                 else
                 {
-                    GetComponent<Animator>().SetBool("flying", false);
+                    canFly = true;
 
                 }
+            }
 
-                if (isGrounded)
-                {
-                    GetComponent<Animator>().SetBool("jumping", false);
-                }
-                else
-                {
-                    GetComponent<Animator>().SetBool("jumping", true);
-                }
-
-                //Escadas
-                if (inEscadas)
-                {
-                    //gameObject.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePositionY;
-                    //gameObject.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePositionX;
-                    rigidbody.gravityScale = 0;
-                    if (Input.GetKey(KeyCode.W))
-                    {
-                        GetComponent<Rigidbody2D>().velocity = new Vector2(movimento, movimento2 * velocidadeMaxima);
-                        rigidbody.gravityScale = initialGravity;
-                        //rigidbody.velocity = new Vector2(rigidbody.velocity.x, 0f);
-                        //rigidbody.AddForce(new Vector2(0, 6f * Time.deltaTime), ForceMode2D.Impulse);
-                    }
-
-                    if (Input.GetKey(KeyCode.S))
-                    {
-                        rigidbody.gravityScale = initialGravity;
-                        GetComponent<Rigidbody2D>().velocity = new Vector2(movimento, movimento2 * velocidadeMaxima);
-                        //rigidbody.AddForce(new Vector2(0, -6f * Time.deltaTime), ForceMode2D.Impulse);
-                    }
-                    //rigidbody.AddForce(new Vector2(0f,forcaY * Time.deltaTime), ForceMode2D.Impulse);
-
-                }else
-                {
-                    rigidbody.gravityScale = initialGravity; //Voltar gravidade inicial
-                }
+            //Voando
+            if (canFly && Input.GetKey(KeyCode.Space))
+            {
+                GetComponent<Animator>().SetBool("flying", true);
+                rigidbody.velocity = new Vector2(rigidbody.velocity.x, -0.5f);
 
             }
             else
             {
+                GetComponent<Animator>().SetBool("flying", false);
+
+            }
+
+            if (isGrounded)
+            {
+                GetComponent<Animator>().SetBool("jumping", false);
+            }
+            else
+            {
+                GetComponent<Animator>().SetBool("jumping", true);
+            }
+
+            //Escadas
+            if (inEscadas)
+            {
+                //gameObject.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePositionY;
+                //gameObject.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePositionX;
+                rigidbody.gravityScale = 0;
                 if (Input.GetKey(KeyCode.W))
                 {
-                    rigidbody.AddForce(new Vector2(0, 6f * Time.deltaTime), ForceMode2D.Impulse);
+                    GetComponent<Rigidbody2D>().velocity = new Vector2(movimento, movimento2 * velocidadeMaxima);
+                    rigidbody.gravityScale = initialGravity;
+                    //rigidbody.velocity = new Vector2(rigidbody.velocity.x, 0f);
+                    //rigidbody.AddForce(new Vector2(0, 6f * Time.deltaTime), ForceMode2D.Impulse);
                 }
 
                 if (Input.GetKey(KeyCode.S))
                 {
-                    rigidbody.AddForce(new Vector2(0, -6f * Time.deltaTime), ForceMode2D.Impulse);
+                    rigidbody.gravityScale = initialGravity;
+                    GetComponent<Rigidbody2D>().velocity = new Vector2(movimento, movimento2 * velocidadeMaxima);
+                    //rigidbody.AddForce(new Vector2(0, -6f * Time.deltaTime), ForceMode2D.Impulse);
                 }
+                //rigidbody.AddForce(new Vector2(0f,forcaY * Time.deltaTime), ForceMode2D.Impulse);
 
-                rigidbody.AddForce(new Vector2(0, 10f * Time.deltaTime), ForceMode2D.Impulse);
-
-            }
-
-            GetComponent<Animator>().SetBool("swimming", inWater);
-
-            //Hammer
-            if (Input.GetKeyDown(KeyCode.LeftControl))
+            }else
             {
-
-                GetComponent<Animator>().SetTrigger("hammer");
-                Collider2D[] colliders = new Collider2D[3];
-                transform.Find("HammerArea").gameObject.GetComponent<Collider2D>().OverlapCollider(new ContactFilter2D(), colliders);
-                //OverlapCollider é para detectar a colisão
-                //transform.Find está procurando dentro do objeto player um objeto que se chama HammerArea 
-
-                for (int i = 0; i < colliders.Length; i++)
-                {
-                    if (colliders[i] != null && colliders[i].gameObject.CompareTag("Monstros"))
-                    {
-                        Destroy(colliders[i].gameObject);
-                    }
-                }
-
-
+                rigidbody.gravityScale = initialGravity; //Voltar gravidade inicial
             }
 
         }
-
-        //Trigger para agua
-        private void OnTriggerEnter2D(Collider2D collision2D)
+        else
         {
-            if (collision2D.gameObject.CompareTag("Water"))
+            if (Input.GetKey(KeyCode.W))
             {
-                inWater = true;
-                Debug.Log("In " + collision2D.gameObject.tag);
-                //GetComponent<Animator>().SetBool("swimming", true);
-                canFly = false;
-                isGrounded = false;
-                GetComponent<Animator>().SetBool("jumping", false);
-                GetComponent<Animator>().SetBool("walking", false);
-
+                rigidbody.AddForce(new Vector2(0, 6f * Time.deltaTime), ForceMode2D.Impulse);
             }
 
-            if (collision2D.gameObject.CompareTag("Escadas"))
+            if (Input.GetKey(KeyCode.S))
             {
-                inEscadas = true;
-                Debug.Log("In " + collision2D.gameObject.tag);
-                GetComponent<Rigidbody2D>().gravityScale = initialGravity;
+                rigidbody.AddForce(new Vector2(0, -6f * Time.deltaTime), ForceMode2D.Impulse);
             }
 
-            if (collision2D.gameObject.CompareTag("Moedas"))
+            rigidbody.AddForce(new Vector2(0, 10f * Time.deltaTime), ForceMode2D.Impulse);
+
+        }
+
+        GetComponent<Animator>().SetBool("swimming", inWater);
+
+        //Hammer
+        if (Input.GetKeyDown(KeyCode.LeftControl))
+        {
+
+            GetComponent<Animator>().SetTrigger("hammer");
+            Collider2D[] colliders = new Collider2D[3];
+            transform.Find("HammerArea").gameObject.GetComponent<Collider2D>().OverlapCollider(new ContactFilter2D(), colliders);
+            //OverlapCollider é para detectar a colisão
+            //transform.Find está procurando dentro do objeto player um objeto que se chama HammerArea 
+
+            for (int i = 0; i < colliders.Length; i++)
             {
-                rings += 1;
-                Destroy(collision2D.gameObject);
-                TextRings.text = rings.ToString();
+                if (colliders[i] != null && colliders[i].gameObject.CompareTag("Monstros"))
+                {
+                    Destroy(colliders[i].gameObject);
+                }
             }
-            /*
-            if (Input.GetKeyUp(KeyCode.LeftControl) && collision2D.gameObject.CompareTag("Monstros"))
-            {
-                isHammering = true;
-                Destroy(collision2D.gameObject);
-            }
-            */
-            /*if (collision2D.gameObject.CompareTag("Checkpoint"))
-            {
-                lastCheckpoint = collision2D.gameObject;
-            }*/
+
+
+        }
+
+    }
+
+    //Trigger para agua
+    private void OnTriggerEnter2D(Collider2D collision2D)
+    {
+        if (collision2D.gameObject.CompareTag("Water"))
+        {
+            inWater = true;
+            Debug.Log("In " + collision2D.gameObject.tag);
+            //GetComponent<Animator>().SetBool("swimming", true);
+            canFly = false;
+            isGrounded = false;
+            GetComponent<Animator>().SetBool("jumping", false);
+            GetComponent<Animator>().SetBool("walking", false);
+
+        }
+
+        if (collision2D.gameObject.CompareTag("Escadas"))
+        {
+            inEscadas = true;
+            Debug.Log("In " + collision2D.gameObject.tag);
+            GetComponent<Rigidbody2D>().gravityScale = initialGravity;
+        }
+
+        if (collision2D.gameObject.CompareTag("Moedas"))
+        {
+            rings += 1;
+            Destroy(collision2D.gameObject);
+            TextRings.text = rings.ToString();
+        }
+        /*
+        if (Input.GetKeyUp(KeyCode.LeftControl) && collision2D.gameObject.CompareTag("Monstros"))
+        {
+            isHammering = true;
+            Destroy(collision2D.gameObject);
+        }
+        */
+        /*if (collision2D.gameObject.CompareTag("Checkpoint"))
+        {
+            lastCheckpoint = collision2D.gameObject;
+        }*/
 
     }
 
