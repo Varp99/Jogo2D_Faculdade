@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
+    [Header("Movement Variables")]
     // Start is called before the first frame update
     public float forcaPulo;
     public float velocidadeMaxima;
@@ -18,13 +19,19 @@ public class Player : MonoBehaviour
 
     private bool isGrounded;
     private bool canJump;
-    private bool canMove;
     //public bool inWater;
     //public bool inEscadas;
     private bool isAttack;
 
     //public GameObject lastCheckpoint;
     private Animator animator;
+    //private Rigidbody2D rigidbody;
+
+    [Header("Attack Variables")]
+    public Transform attackCheck;
+    public float radiusAttack;
+    public float timeNextAttack; 
+
 
     void Start()
     {
@@ -37,15 +44,12 @@ public class Player : MonoBehaviour
 
         GetComponent<CapsuleCollider2D>(); //Pegando o componete Collider2D
         animator = GetComponent<Animator>();
-
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
         Rigidbody2D rigidbody = GetComponent<Rigidbody2D>(); //Definindo Rigidbody2D numa variavel
-        //Rigidbody2D fly = GetComponent<Rigidbody2D>();
-
         float movimento = Input.GetAxis("Horizontal"); //Definir para andar para a esquerda ou para a direita, eixo x
         //float movimento2 = Input.GetAxis("Vertical"); //Para escada
         rigidbody.velocity = new Vector2(movimento * velocidadeMaxima, rigidbody.velocity.y); //Definindo uma velocidade constante para o eixo x e para o eixo y a velocidade fixa
@@ -54,9 +58,11 @@ public class Player : MonoBehaviour
         if (movimento < 0)
         {
             GetComponent<SpriteRenderer>().flipX = true; //Reverter a posição do eixo y, virar o player
+            attackCheck.localPosition = new Vector2(-attackCheck.localPosition.x, attackCheck.localPosition.y);
         }else if (movimento > 0)
         {
             GetComponent<SpriteRenderer>().flipX = false;
+            attackCheck.localPosition = new Vector2(-attackCheck.localPosition.x, attackCheck.localPosition.y);
         }
 
         if (movimento > 0 || movimento < 0) //Verificação se está andando
@@ -93,7 +99,6 @@ public class Player : MonoBehaviour
             if (movimento == 0)
             {
                 animator.SetTrigger("Attack");
-                canMove = false;
             }
 
             //Collider2D[] colliders = new Collider2D[3];
@@ -103,7 +108,7 @@ public class Player : MonoBehaviour
 
             /*for (int i = 0; i < colliders.Length; i++)
             {
-                if (colliders[i] != null && colliders[i].gameObject.CompareTag("Monstros"))
+                if (colliders[i] != null && colliders[i].gameObject.CompareTag("Enemies"))
                 {
                     Destroy(colliders[i].gameObject);
                 }
