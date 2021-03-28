@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Player : MonoBehaviour
+public class PlayerMovement : MonoBehaviour
 {
     // Start is called before the first frame update
     [Header("Movement Variables")]
@@ -130,7 +130,7 @@ public class Player : MonoBehaviour
 
         for (int i = 0; i < colliders.Length; i++)
         {
-            if (colliders[i] != null && colliders[i].gameObject.CompareTag("Enemies"))
+            if (colliders[i] != null && colliders[i].gameObject.CompareTag("Orc"))
             {
                 enemyHealth = colliders[i].GetComponent<EnemyHealth>();
                 enemyHealth.TakeDamage(attackDamage);
@@ -147,13 +147,13 @@ public class Player : MonoBehaviour
             //GetComponent<Rigidbody2D>().gravityScale = initialGravity;
         }
 
-        if (collision2D.gameObject.CompareTag("Enemies"))
+        /*if (collision2D.gameObject.CompareTag("Orc"))
         {
             isGrounded = true;
             lives -= 1;
             //Debug.Log(lives);
             //TextLives.text = lives.ToString();
-        }
+        }*/
 
         /*if (collision2D.gameObject.CompareTag("Espinhos"))
         {
