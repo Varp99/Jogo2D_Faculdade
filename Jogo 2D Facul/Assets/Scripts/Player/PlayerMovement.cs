@@ -12,7 +12,6 @@ public class PlayerMovement : MonoBehaviour
     public int lives;
     private bool isGrounded;
     private float movimento;
-    //private bool canJump;
 
     //public int rings;
     //public Text TextLives;
@@ -86,32 +85,19 @@ public class PlayerMovement : MonoBehaviour
         }
 
         //Atacar
-        if (timeAttack <= 0f)
+        timeAttack += Time.deltaTime;
+        if (timeAttack >= timeToNextAttack)
         {
-            if (Input.GetButtonDown("Fire1"))
+            if (Input.GetButtonDown("Fire1") && movimento == 0)
             {
-                if (movimento == 0)
-                {
+                //if ((rigidbody.velocity.x >= 0 && rigidbody.velocity.x  <= 2) || (rigidbody.velocity.x >= -2 && rigidbody.velocity.x <= 0))
+                //if ((movimento >= 0 && movimento  < 0.3f) || (movimento > -0.3f && movimento <= 0))
+                //{
+                    timeAttack = 0f;
                     animator.SetTrigger("Attack");
-                    timeAttack = timeToNextAttack;
-                }
+                    //Debug.Log(timeAttack);
+                //}
             }
-        }
-        else
-        {
-            timeAttack -= Time.deltaTime;
-        }
-
-        //Morrendo
-        if (lives == 0)
-        {
-            //collision2D.gameObject.GetComponents<Rigidbody2D>().AddForce(new Vector2(0, 6f * Time.deltaTime), ForceMode2D.Impulse);
-            //transform.position = lastCheckpoint.transform.position;
-            //lives = 3;
-            //TextLives.text = lives.ToString();
-            //rings = 0;
-            //TextRings.text = rings.ToString();
-
         }
     }
 

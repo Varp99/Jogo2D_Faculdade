@@ -7,15 +7,17 @@ public class EnemyHealth : MonoBehaviour
     public float startingHealth = 3;
     public float currentHealth;
     public float sinkSpeed = 2.5f; //Velocidade do corpo sumir
+    protected bool isDead;
+    protected bool isSinking;
+    private bool damaged;
+    
     //public AudioClip deathClip;
-
     Animator anim;
     //AudioSource enemyAudio;
     //ParticleSystem hitParticles;
     CapsuleCollider2D capsuleCollider;
-    protected bool isDead;
-    protected bool isSinking;
-
+    private SpriteRenderer sprite;
+    private EnemyMovement enemyMovement;
 
     protected void Awake()
     {
@@ -23,9 +25,10 @@ public class EnemyHealth : MonoBehaviour
         //enemyAudio = GetComponent<AudioSource>();
         //hitParticles = GetComponentInChildren<ParticleSystem>();
         capsuleCollider = GetComponent<CapsuleCollider2D>();
+        sprite = GetComponent<SpriteRenderer>();
+        enemyMovement = GetComponent<EnemyMovement>();
         currentHealth = startingHealth;
     }
-
 
     void Update()
     {
@@ -36,7 +39,6 @@ public class EnemyHealth : MonoBehaviour
         }
     }
 
-
     public void TakeDamage(float amount)
     {
         if (isDead)
@@ -45,7 +47,8 @@ public class EnemyHealth : MonoBehaviour
         //enemyAudio.Play();
         //hitParticles.transform.position = hitPoint; //Vai pegar o local onde o tiro foi acertado
         //hitParticles.Play();
-
+        damaged = true;
+        StartCoroutine(DamageIndicator());
         currentHealth -= amount;
 
         if (currentHealth <= 0)
@@ -55,6 +58,25 @@ public class EnemyHealth : MonoBehaviour
         //Debug.Log(currentHealth);
     }
 
+    public bool isLife()
+    {
+        return isDead;
+    }
+
+    IEnumerator DamageIndicator()
+    {
+        if (damaged)
+        {
+            sprite.color = Color.red;
+        }
+        else
+        {
+            damaged = false;
+        }
+        yield return new WaitForSeconds(0.1f);
+        sprite.color = Color.white;
+    }
+
     protected void Death()
     {
         isDead = true;
@@ -62,6 +84,7 @@ public class EnemyHealth : MonoBehaviour
         anim.SetTrigger("Dead");
         //enemyAudio.clip = deathClip;
         //enemyAudio.Play();
+        enemyMovement.enabled = false;
         StartSinking();
     }
 
@@ -71,7 +94,7 @@ public class EnemyHealth : MonoBehaviour
         //GetComponent<UnityEngine.AI.NavMeshAgent>().enabled = false;
         //Quando esse inimigo morrer os outros inimigos vão ignorar o corpo e permitir passar por aquele caminho no caso calcular aquele local para passar
         GetComponent<Rigidbody2D>().isKinematic = true;
-        isSinking = true;
-        Destroy(gameObject, 5f); //Vai destruir o objeto depois de 2 segundos
+        //isSinking = true;
+        Destroy(gameObject, 5f); //Vai destruir o objeto depois de 5 segundos
     }
 }

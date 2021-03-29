@@ -1,25 +1,26 @@
 ﻿using UnityEngine;
 
-public class EnemyAttack : MonoBehaviour
+public class EnemyAttack : EnemyMovement
 {
-    public static float timeBetweenAttacks = 0.5f; //Intervalo entre ataques
-    public static float damage;
-    protected float attackDamage;
+    public float timeBetweenAttacks = 0.5f; //Intervalo entre ataques
+    private float damage;
+    public float attackDamage;
     public float distanceAttack;
-    protected bool playerInRange;
+    protected bool canAttack;
     protected float timer;
 
-    protected GameObject player; //Pegar a classe player para detectar a colisão e pegar o tanto de vida do player
-    protected Transform playerTransform; 
+    //protected GameObject player; //Pegar a classe player para detectar a colisão e pegar o tanto de vida do player
+    //protected Transform playerTransform; 
+    public Transform attackCheck;
     protected PlayerHealth playerHealth;
-    protected EnemyHealth enemyHealth;
-    protected Animator anim;
+    //protected EnemyHealth enemyHealth;
+    //protected Animator anim;
 
     void Awake ()
     {
         player = GameObject.FindGameObjectWithTag ("Player");
         playerTransform = player.GetComponent<Transform>();
-        playerHealth = player.GetComponent <PlayerHealth>();
+        playerHealth = player.GetComponent<PlayerHealth>();
         enemyHealth = GetComponent<EnemyHealth>();
         anim = GetComponent <Animator>();
         
@@ -34,36 +35,9 @@ public class EnemyAttack : MonoBehaviour
         }
     }
 
-    void OnTriggerEnter (Collider other)
-    {
-        if(other.gameObject == player)
-        {
-            playerInRange = true;
-        }
-        Debug.Log(other);
-    }
-
-    void OnTriggerExit (Collider other)
-    {
-        if(other.gameObject == player)
-        {
-            playerInRange = false;
-        }
-    }
-
     void Update()
     {
         timer += Time.deltaTime;
-
-        if (timer >= timeBetweenAttacks && playerInRange && enemyHealth.currentHealth > 0f)
-        {
-            Attack();
-        }
-
-        /*if(playerHealth.currentHealth <= 0f)
-        {
-            anim.SetTrigger ("PlayerDead");
-        }*/
 
         if (gameObject.CompareTag("Orc"))
         {
@@ -74,17 +48,71 @@ public class EnemyAttack : MonoBehaviour
         {
             damage = attackDamage;
         }
+
+        if (timer >= timeBetweenAttacks && enemyHealth.currentHealth > 0f)
+        {
+            if (canAttack)
+            {
+                timer = 0f;
+                checkAreaAttack();
+                //Debug.Log("Attack");
+            }
+            else
+            {
+                canAttack = true;
+            }
+        }
+
+        //Debug.Log(timer);
+        //Debug.Log(playerInRange);
+    }
+
+    private void FixedUpdate()
+    {
+        
+    }
+
+    protected void checkAreaAttack()
+    {
+        Collider2D[] colliders = new Collider2D[3];
+        transform.Find("AttackCheck").gameObject.GetComponent<Collider2D>().OverlapCollider(new ContactFilter2D(), colliders);
+
+        for (int i = 0; i < colliders.Length; i++)
+        {
+            if (colliders[i] != null && colliders[i].gameObject.CompareTag("Player"))
+            {
+                if (playerHealth.currentHealth > 0)
+                {
+                    anim.SetTrigger("Attack");
+                    canAttack = false;
+                    //Debug.Log(colliders[i]);
+                }
+            }
+            else
+            {
+                canAttack = false;
+            }
+        }
     }
 
     protected void Attack ()
     {
-        //timer = 0f;
+        Collider2D[] colliders = new Collider2D[3];
+        transform.Find("AttackCheck").gameObject.GetComponent<Collider2D>().OverlapCollider(new ContactFilter2D(), colliders);
 
-        /*if(playerHealth.currentHealth > 0)
+        for (int i = 0; i < colliders.Length; i++)
         {
-            anim.SetTrigger("Attack");
-            playerHealth.TakeDamage (damage);
-        }*/
-        anim.SetTrigger("Attack");
+            if (colliders[i] != null && colliders[i].gameObject.CompareTag("Player"))
+            {
+                if (playerHealth.currentHealth > 0)
+                {
+                    playerHealth.TakeDamage(damage);
+                }
+            }
+            else
+            {
+                checkAreaAttack();
+            }
+        }
     }
 }

@@ -9,7 +9,7 @@ public class PlayerHealth : MonoBehaviour
     public float startingHealth = 5f; //Começar a vida com o valor
     public float currentHealth; //Vida atual
     //public Slider healthSlider;
-    //public Image damageImage;
+    private SpriteRenderer sprite;
     //public AudioClip deathClip;
     //public float flashSpeed = 5f; //Velocidade para piscar a imagem
     //public Color flashColour = new Color(1f, 0f, 0f, 0.1f); //Red, green, blue, alpha = transparencia
@@ -18,7 +18,7 @@ public class PlayerHealth : MonoBehaviour
     AudioSource playerAudio;
     PlayerMovement playerMovement;
     bool isDead;
-    //bool damaged;
+    bool damaged;
 
     void Awake ()
     {
@@ -26,25 +26,18 @@ public class PlayerHealth : MonoBehaviour
         playerAudio = GetComponent <AudioSource> ();
         playerMovement = GetComponent <PlayerMovement> ();
         currentHealth = startingHealth;
+        sprite = GetComponent<SpriteRenderer>();
     }
 
     void Update ()
     {
-        /*if(damaged)
-        {
-            damageImage.color = flashColour;
-        }
-        else
-        {
-            //Enquanto o player não levar dano vai levemente pegar a cor escolhida e depois vai limpar, ou seja, zera a cor na velocidade do flashSpeed 
-            damageImage.color = Color.Lerp (damageImage.color, Color.clear, flashSpeed * Time.deltaTime);
-        }*/
-        //damaged = false;
+        
     }
 
     public void TakeDamage (float amount)
     {
-        //damaged = true;
+        damaged = true;
+        StartCoroutine(DamageIndicator());
         currentHealth -= amount; //Vai reduzir a vida de acordo com o dano levado
         //healthSlider.value = currentHealth; //Vai mudar o valor da barra de vida HealthUI 
         //playerAudio.Play ();
@@ -55,6 +48,20 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
+    IEnumerator DamageIndicator()
+    {
+        if (damaged)
+        {
+            sprite.color = Color.red;
+        }
+        else
+        {
+            damaged = false;
+        }
+        yield return new WaitForSeconds(0.1f);
+        sprite.color = Color.white;
+    }
+
     void Death ()
     {
         isDead = true;
@@ -62,6 +69,13 @@ public class PlayerHealth : MonoBehaviour
         //playerAudio.clip = deathClip;
         //playerAudio.Play ();
         playerMovement.enabled = false;
+        StartCoroutine(AutoRestartLevel());
+    }
+
+    IEnumerator AutoRestartLevel()
+    {
+        yield return new WaitForSeconds(5f);
+        RestartLevel();
     }
 
     public void RestartLevel ()

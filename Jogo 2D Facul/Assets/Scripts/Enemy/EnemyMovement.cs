@@ -2,18 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyMovement : EnemyAttack
+public class EnemyMovement : MonoBehaviour
 {
     public float speed = 5f;
-    protected float playerDistance = 1f;
-    public float playerDistanceMin = 1f;
-    protected float movement = 1f;
+    protected float playerDistance;
+    public float playerDistanceMin = 2f;
+    //protected float movement = 1f;
     //bool isRight = true;
     protected bool isMoving = false;
+    protected bool isDead;
 
     //protected Transform groundCheck;
     protected new Rigidbody2D rigidbody;
     protected SpriteRenderer sprite;
+    protected GameObject player; //Pegar a classe player para detectar a colisão e pegar o tanto de vida do player
+    protected Transform playerTransform;
+    protected EnemyHealth enemyHealth;
+    protected Animator anim;
+    private EnemyAttack enemyAttack;
 
     private void Awake()
     {
@@ -22,6 +28,8 @@ public class EnemyMovement : EnemyAttack
         player = GameObject.FindGameObjectWithTag("Player");
         playerTransform = player.GetComponent<Transform>();
         anim = GetComponent <Animator>();
+        enemyHealth = GetComponent<EnemyHealth>();
+        enemyAttack = GetComponent<EnemyAttack>();
     }
 
     void Update()
@@ -50,9 +58,10 @@ public class EnemyMovement : EnemyAttack
         }*/
 
         playerDistance = PlayerDistance();
-        isMoving = (playerDistance <= distanceAttack);
+        //isMoving = playerDistance <= enemyAttack.distanceAttack;
+        isDead = enemyHealth.isLife();
 
-        if (isMoving)
+        if (isDead == false && playerDistance <= enemyAttack.distanceAttack)
         {
             if (playerDistance >= playerDistanceMin)
             {
@@ -60,7 +69,6 @@ public class EnemyMovement : EnemyAttack
             }
             else
             {
-                Attack();
                 isMoving = false;
             }
 
@@ -80,24 +88,32 @@ public class EnemyMovement : EnemyAttack
             anim.SetBool("Walking", false);
         }
 
-        
         //Debug.Log(Vector2.down); 
         //Debug.DrawRay(groundCheck.position, groundCheck.TransformDirection(Vector3.forward) * distance, Color.yellow);
     }
 
     private void FixedUpdate()
     {
-        if (isMoving)
+        if (isMoving && isDead == false)
         {
             rigidbody.velocity = new Vector2(speed, rigidbody.velocity.y);
+        }else if (isDead)
+        {
+            rigidbody.velocity = new Vector2(0, 0);
         }
-        //Debug.Log(playerDistance >= playerDistanceMin);
+        //Debug.Log(PlayerInRange());
+        //Debug.Log(playerDistance);
+        //Debug.Log(playerDistanceMin);
+        //Debug.Log(playerInRange);
+        //Debug.Log(playerTransform.position.x - transform.position.x);
+        //PlayerInRange();
     }
 
     private void Flip()
     {
         sprite.flipX = !sprite.flipX;
         speed *= -1;
+        enemyAttack.attackCheck.localPosition = new Vector2(-enemyAttack.attackCheck.localPosition.x, enemyAttack.attackCheck.localPosition.y);
     }
 
     protected float PlayerDistance()
