@@ -1,20 +1,20 @@
 ﻿using UnityEngine;
 
-public class EnemyAttack : EnemyMovement
+public class EnemyAttack : MonoBehaviour
 {
     public float timeBetweenAttacks = 0.5f; //Intervalo entre ataques
     private float damage;
     public float attackDamage;
     public float distanceAttack;
-    protected bool canAttack;
+    protected bool canAttack = false;
     protected float timer;
 
-    //protected GameObject player; //Pegar a classe player para detectar a colisão e pegar o tanto de vida do player
-    //protected Transform playerTransform; 
     public Transform attackCheck;
     protected PlayerHealth playerHealth;
-    //protected EnemyHealth enemyHealth;
-    //protected Animator anim;
+    protected GameObject player; //Pegar a classe player para detectar a colisão e pegar o tanto de vida do player
+    protected Transform playerTransform;
+    protected EnemyHealth enemyHealth;
+    protected Animator anim;
 
     void Awake ()
     {
@@ -49,22 +49,7 @@ public class EnemyAttack : EnemyMovement
             damage = attackDamage;
         }
 
-        if (timer >= timeBetweenAttacks && enemyHealth.currentHealth > 0f)
-        {
-            if (canAttack)
-            {
-                timer = 0f;
-                checkAreaAttack();
-                //Debug.Log("Attack");
-            }
-            else
-            {
-                canAttack = true;
-            }
-        }
-
-        //Debug.Log(timer);
-        //Debug.Log(playerInRange);
+        checkAreaAttack();
     }
 
     private void FixedUpdate()
@@ -81,11 +66,11 @@ public class EnemyAttack : EnemyMovement
         {
             if (colliders[i] != null && colliders[i].gameObject.CompareTag("Player"))
             {
-                if (playerHealth.currentHealth > 0)
+                if (playerHealth.currentHealth > 0 && timer >= timeBetweenAttacks && enemyHealth.currentHealth > 0f)
                 {
+                    timer = 0f;
                     anim.SetTrigger("Attack");
                     canAttack = false;
-                    //Debug.Log(colliders[i]);
                 }
             }
             else

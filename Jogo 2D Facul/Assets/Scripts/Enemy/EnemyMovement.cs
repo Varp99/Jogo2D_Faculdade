@@ -4,13 +4,24 @@ using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour
 {
+    [Header("Movement Properties")]
     public float speed = 5f;
+    public float climbSpeed = 1.3f;
+    public int direction = 1;
     protected float playerDistance;
     public float playerDistanceMin = 2f;
-    //protected float movement = 1f;
-    //bool isRight = true;
     protected bool isMoving = false;
     protected bool isDead;
+    private bool virou = false;
+
+    [Header("RayCast Properties")]
+    public LayerMask layerGround;
+    public float lenghtGround;
+    public float lenghtWall;
+    public Transform rayPointGround;
+    public Transform rayPointWall;
+    public RaycastHit2D hitGround;
+    public RaycastHit2D hitWall;
 
     //protected Transform groundCheck;
     protected new Rigidbody2D rigidbody;
@@ -19,7 +30,8 @@ public class EnemyMovement : MonoBehaviour
     protected Transform playerTransform;
     protected EnemyHealth enemyHealth;
     protected Animator anim;
-    private EnemyAttack enemyAttack;
+    protected EnemyAttack enemyAttack;
+    
 
     private void Awake()
     {
@@ -34,34 +46,10 @@ public class EnemyMovement : MonoBehaviour
 
     void Update()
     {
-        /*transform.Translate(Vector2.right * speed * Time.deltaTime);
-        RaycastHit2D ground = Physics2D.Raycast(groundCheck.position, Vector2.down, distance);
-
-        if (ground.collider == false)
-        {
-            if (isRight)
-            {
-                transform.eulerAngles = new Vector3(0, 0, 0);
-                sprite.flipX = true;
-                Turn();
-                isRight = false;
-                Debug.Log("Esquerda");
-            }
-            else
-            {
-                transform.eulerAngles = new Vector3(0, 180, 0);
-                sprite.flipX = false;
-                Turn();
-                isRight = true;
-                Debug.Log("Direita");
-            }
-        }*/
-
         playerDistance = PlayerDistance();
-        //isMoving = playerDistance <= enemyAttack.distanceAttack;
         isDead = enemyHealth.isLife();
 
-        if (isDead == false && playerDistance <= enemyAttack.distanceAttack)
+        if (isDead == false && playerDistance <= enemyAttack.distanceAttack) //Vai seguir o jogador
         {
             if (playerDistance >= playerDistanceMin)
             {
@@ -72,52 +60,134 @@ public class EnemyMovement : MonoBehaviour
                 isMoving = false;
             }
 
-            if ((playerTransform.position.x > transform.position.x && sprite.flipX)
-                || (playerTransform.position.x < transform.position.x && !sprite.flipX))
+            if ((playerTransform.position.x > transform.position.x && virou)
+                || (playerTransform.position.x < transform.position.x && !virou))
+            {
+                int playerPosition = (int)playerTransform.position.y;
+                int enemyPosition = (int)transform.position.y;
+
+                if (playerPosition == enemyPosition) //Se tiver na mesma altura ele pode virar
+                {
+                    Flip();
+                }
+                else //Se não tiver na mesma altura e vai continuar a patrulha
+                {
+                    if (!RaycastGround().collider || RaycastWall().collider)
+                    {
+                        Flip();
+                    }
+                }
+            }
+
+            if (!RaycastGround().collider)
+            {
+                isMoving = false;
+            }
+        }
+        else //Vai fazer a patrulha
+        {
+            if (playerDistance >= playerDistanceMin)
+            {
+                isMoving = true;
+            }
+            else
+            {
+                isMoving = false;
+            }
+
+            if (!RaycastGround().collider || RaycastWall().collider)
             {
                 Flip();
             }
         }
 
-        if (rigidbody.velocity.x > 0 || rigidbody.velocity.x < 0)
+        if (!isDead)
         {
-            anim.SetBool("Walking", true);
-        }
-        else
-        {
-            anim.SetBool("Walking", false);
+            if (rigidbody.velocity.x > 0 || rigidbody.velocity.x < 0)
+            {
+                anim.SetBool("Walking", true);
+            }
+            else
+            {
+                anim.SetBool("Walking", false);
+            }
         }
 
-        //Debug.Log(Vector2.down); 
-        //Debug.DrawRay(groundCheck.position, groundCheck.TransformDirection(Vector3.forward) * distance, Color.yellow);
+        //Debug.Log(playerDistance);
     }
 
     private void FixedUpdate()
     {
-        if (isMoving && isDead == false)
-        {
-            rigidbody.velocity = new Vector2(speed, rigidbody.velocity.y);
-        }else if (isDead)
-        {
-            rigidbody.velocity = new Vector2(0, 0);
-        }
-        //Debug.Log(PlayerInRange());
-        //Debug.Log(playerDistance);
-        //Debug.Log(playerDistanceMin);
-        //Debug.Log(playerInRange);
-        //Debug.Log(playerTransform.position.x - transform.position.x);
-        //PlayerInRange();
+        Movement();
+    }
+
+    protected virtual RaycastHit2D RaycastGround()
+    {
+        //Send out the desired raycast and record the result
+        hitGround = Physics2D.Raycast(rayPointGround.position, Vector2.down, lenghtGround, layerGround);
+
+        //Determine the color based on if the raycast hit...
+        Color color = hitGround ? Color.red : Color.green;
+        //And draw the ray in the scene view
+        Debug.DrawRay(rayPointGround.position, Vector2.down * lenghtGround, color);
+
+        //Return the results of the raycast
+        return hitGround;
+    }
+
+    protected virtual RaycastHit2D RaycastWall()
+    {
+        //Send out the desired raycast and record the result
+        hitWall = Physics2D.Raycast(rayPointWall.position, Vector2.right * direction, lenghtWall, layerGround);
+
+        //Determine the color based on if the raycast hit...
+        Color color = hitWall ? Color.yellow : Color.blue;
+        //And draw the ray in the scene view
+        Debug.DrawRay(rayPointWall.position, Vector2.right * direction * lenghtWall, color);
+
+        //Return the results of the raycast
+        return hitWall;
     }
 
     private void Flip()
     {
-        sprite.flipX = !sprite.flipX;
-        speed *= -1;
-        enemyAttack.attackCheck.localPosition = new Vector2(-enemyAttack.attackCheck.localPosition.x, enemyAttack.attackCheck.localPosition.y);
+        direction *= -1;
+        if (direction == 1)
+        {
+            transform.eulerAngles = new Vector3(0, 0, 0);
+            virou = false;
+        }
+        else if (direction == -1)
+        {
+            transform.eulerAngles = new Vector3(0, 180, 0);
+            virou = true;
+        }
     }
 
     protected float PlayerDistance()
     {
         return Vector2.Distance(playerTransform.position, transform.position);
+    }
+
+    private void Movement()
+    {
+        float horizontalVelocity = speed;
+        horizontalVelocity *= direction;
+
+        if (isMoving && isDead == false)
+        {
+            if (rigidbody.velocity.y > 0)
+            {
+                rigidbody.velocity = new Vector2(horizontalVelocity * climbSpeed, rigidbody.velocity.y);
+            }
+            else
+            {
+                rigidbody.velocity = new Vector2(horizontalVelocity, rigidbody.velocity.y);
+            }
+        }
+        else if (isDead)
+        {
+            rigidbody.velocity = new Vector2(0, 0);
+        }
     }
 }
