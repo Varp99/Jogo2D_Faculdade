@@ -31,7 +31,10 @@ public class PlayerHealth : MonoBehaviour
 
     void Update ()
     {
-        
+        if (currentHealth <= 0 && !isDead) //Se a vida chegar a 0 e o player ainda estiver vivo dai vai matar o player
+        {
+            Death();
+        }
     }
 
     public void TakeDamage (float amount)
@@ -80,6 +83,6 @@ public class PlayerHealth : MonoBehaviour
 
     public void RestartLevel ()
     {
-        SceneManager.LoadScene (0);
+        SceneManager.LoadScene (1);
     }
 }

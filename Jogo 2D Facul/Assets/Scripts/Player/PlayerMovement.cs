@@ -9,7 +9,8 @@ public class PlayerMovement : MonoBehaviour
     [Header("Movement Variables")]
     public float jumpForce;
     public float speed;
-    public int lives;
+    public int coin = 0;
+    public int key = 0;
     private bool isGrounded;
     private float movimento;
 
@@ -22,6 +23,7 @@ public class PlayerMovement : MonoBehaviour
     private CapsuleCollider2D capsuleCollider;
     private new Rigidbody2D rigidbody;
     private SpriteRenderer sprite;
+    private PlayerHealth playerHealth;
 
     [Header("Attack Variables")]
     public Transform attackCheck;
@@ -29,21 +31,19 @@ public class PlayerMovement : MonoBehaviour
     public float timeToNextAttack;
     private float timeAttack = 0f;
 
+    [Header("RayCast Properties")]
+    public LayerMask layerGround;
+    public float lenghtGround;
+    public Transform rayPointGround;
+    public RaycastHit2D hitGround;
 
     void Start()
     {
-        //TextLives.text = lives.ToString();
-        //TextRings.text = rings.ToString();
-
         capsuleCollider = GetComponent<CapsuleCollider2D>(); //Pegando o componete Collider2D
         animator = GetComponent<Animator>(); //Definindo Animator numa variavel
         rigidbody = GetComponent<Rigidbody2D>(); //Definindo Rigidbody2D numa variavel
         sprite = GetComponent<SpriteRenderer>();
-    }
-
-    private void Update()
-    {
-
+        playerHealth = GetComponent<PlayerHealth>();
     }
 
     // Update is called once per frame
@@ -58,7 +58,7 @@ public class PlayerMovement : MonoBehaviour
             Flip(); //Reverter a posição do eixo y, virar o player
         }
 
-        if (movimento > 0 || movimento < 0) //Verificação se está andando
+        if (movimento != 0) //Verificação se está andando
         {
             animator.SetBool("Walking", true); //Vai setar a animação booleana walking para true iniciando a animação
         }
@@ -67,38 +67,47 @@ public class PlayerMovement : MonoBehaviour
             animator.SetBool("Walking", false); //Se não vai set a animação booleana walking para false parando a animação
         }
 
-        //Pular
-        if (Input.GetKey(KeyCode.Space)) //Pegar a tecla do teclado espaço para pular
+        RaycastGround();
+
+        if (RaycastGround().collider && RaycastGround().collider != null)
         {
-            if (isGrounded) //Se estiver no chão
-            {
-                //GetComponent<AudioSource>().Play();
-                isGrounded = false;
-                animator.SetBool("Jumping", true);
-                rigidbody.velocity = new Vector2(rigidbody.velocity.x, jumpForce);
-                //Debug.Log(isGrounded);
-            }
-            else
-            {
-                animator.SetBool("Jumping", false);
-            }
+            animator.SetBool("IsGrounded", true);
+            isGrounded = true;
+            animator.SetBool("Jumping", false);
+        }
+        else
+        {
+            isGrounded = false; 
+            animator.SetBool("IsGrounded", false);
+        }
+
+        //Pular
+        if (Input.GetKeyDown(KeyCode.Space)) //Pegar a tecla do teclado espaço para pular
+        {
+            if (isGrounded)
+            animator.SetTrigger("Jumping");
+            //Jump();
         }
 
         //Atacar
         timeAttack += Time.deltaTime;
         if (timeAttack >= timeToNextAttack)
         {
-            if (Input.GetButtonDown("Fire1") && movimento == 0)
+            //if (Input.GetButtonDown("Fire1") && movimento == 0)
+            if ((Input.GetKeyDown(KeyCode.Mouse0) && movimento == 0) || (Input.GetKeyDown(KeyCode.LeftControl) && movimento == 0))
             {
-                //if ((rigidbody.velocity.x >= 0 && rigidbody.velocity.x  <= 2) || (rigidbody.velocity.x >= -2 && rigidbody.velocity.x <= 0))
-                //if ((movimento >= 0 && movimento  < 0.3f) || (movimento > -0.3f && movimento <= 0))
-                //{
-                    timeAttack = 0f;
-                    animator.SetTrigger("Attack");
-                    //Debug.Log(timeAttack);
-                //}
+                timeAttack = 0f;
+                animator.SetTrigger("Attack");
             }
         }
+
+        //Debugs
+        Debug.Log("Animator isGrounded " + animator.GetBool("IsGrounded"));
+        Debug.Log("Animator Jumping " + animator.GetBool("Jumping"));
+        Debug.Log("Booleana isGrounded " + isGrounded);
+        Debug.Log("RayCast " + RaycastGround().collider);
+        //Debug.Log("Movimento " + movimento);
+        //Debug.Log(RaycastGround().collider);
     }
 
     //Funções
@@ -124,50 +133,65 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    protected virtual RaycastHit2D RaycastGround()
+    {
+        //Send out the desired raycast and record the result
+        hitGround = Physics2D.Raycast(rayPointGround.position, Vector2.down, lenghtGround, layerGround);
+
+        //Determine the color based on if the raycast hit...
+        Color color = hitGround ? Color.red : Color.green;
+        //And draw the ray in the scene view
+        Debug.DrawRay(rayPointGround.position, Vector2.down * lenghtGround, color);
+
+        //Return the results of the raycast
+        return hitGround;
+    }
+
+    private void Jump() //É chamada no evento da animação de pulo
+    {
+        //if (isGrounded) //Se estiver no chão
+        //{
+            //GetComponent<AudioSource>().Play();
+            isGrounded = false;
+            //animator.SetBool("Jumping", true);
+            animator.SetBool("IsGrounded", false);
+            rigidbody.velocity = new Vector2(rigidbody.velocity.x, jumpForce);
+            //Debug.Log(isGrounded);
+        //}
+    }
+
     //Colisão
     void OnCollisionEnter2D(Collision2D collision2D)
     {
         if (collision2D.gameObject.CompareTag("Plataformas"))
         {
-            isGrounded = true;
+            //isGrounded = true;
+            //animator.SetBool("Jumping", false);
+            //animator.SetBool("IsGrounded", true);
             //GetComponent<Rigidbody2D>().gravityScale = initialGravity;
         }
 
-        /*if (collision2D.gameObject.CompareTag("Orc"))
+        if (collision2D.gameObject.CompareTag("Spines"))
         {
-            isGrounded = true;
-            lives -= 1;
-            //Debug.Log(lives);
+            if (playerHealth.currentHealth > 0)
+            {
+                playerHealth.currentHealth -= playerHealth.startingHealth;
+            }
             //TextLives.text = lives.ToString();
-        }*/
-
-        /*if (collision2D.gameObject.CompareTag("Espinhos"))
-        {
-            isGrounded = true;
-            lives -= 1;
-            //TextLives.text = lives.ToString();
-        }*/
+        }
 
         /*if (collision2D.gameObject.CompareTag("Trampolim"))
         {
             GetComponent<Rigidbody2D>().velocity = new Vector2(0f, 10f);
-        }
-
-        Debug.Log("Colidiu em " + collision2D.gameObject.tag);*/
+        }*/
     }
 
     void OnCollisionExit2D(Collision2D collision2D)
     {
         if (collision2D.gameObject.CompareTag("Plataformas"))
         {
-            isGrounded = false;
+            //isGrounded = false;
+            //animator.SetBool("IsGrounded", false);
         }
-
-        /*if (collision2D.gameObject.CompareTag("Espinhos"))
-        {
-            isGrounded = false;
-        }*/
-
-        //Debug.Log("Parou de colidir em " + collision2D.gameObject.tag);
     }
 }

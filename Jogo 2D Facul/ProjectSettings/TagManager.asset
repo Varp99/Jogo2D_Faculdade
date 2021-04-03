@@ -8,6 +8,12 @@ TagManager:
   - Enemies
   - Orc
   - BossOrc
+  - Life
+  - Coin
+  - Key
+  - Spines
+  - Stair
+  - Door
   layers:
   - Default
   - TransparentFX
@@ -44,4 +50,22 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 3421801591
+    locked: 0
+  - name: BackForeground
+    uniqueID: 3377530421
+    locked: 0
+  - name: Ground
+    uniqueID: 4152061969
+    locked: 0
+  - name: Player
+    uniqueID: 494357787
+    locked: 0
+  - name: Enemies
+    uniqueID: 1954131865
+    locked: 0
+  - name: Foreground
+    uniqueID: 3155969499
     locked: 0

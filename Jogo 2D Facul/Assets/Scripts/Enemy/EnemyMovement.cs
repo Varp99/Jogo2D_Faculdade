@@ -179,6 +179,7 @@ public class EnemyMovement : MonoBehaviour
             if (rigidbody.velocity.y > 0)
             {
                 rigidbody.velocity = new Vector2(horizontalVelocity * climbSpeed, rigidbody.velocity.y);
+                anim.SetBool("Walking", true);
             }
             else
             {
@@ -188,6 +189,7 @@ public class EnemyMovement : MonoBehaviour
         else if (isDead)
         {
             rigidbody.velocity = new Vector2(0, 0);
+            anim.SetBool("Walking", false);
         }
     }
 }
