@@ -45,7 +45,20 @@ public class PlayerMovement : MonoBehaviour
         sprite = GetComponent<SpriteRenderer>();
         playerHealth = GetComponent<PlayerHealth>();
     }
-
+    void Update() 
+    {
+        //Atacar
+        timeAttack += Time.deltaTime;
+        if (timeAttack >= timeToNextAttack)
+        {
+            //if (Input.GetButtonDown("Fire1") && movimento == 0)
+            if ((Input.GetKeyDown(KeyCode.Mouse0) && movimento == 0) || (Input.GetKeyDown(KeyCode.LeftControl) && movimento == 0))
+            {
+                timeAttack = 0f;
+                animator.SetTrigger("Attack");
+            }
+        }
+    }
     // Update is called once per frame
     void FixedUpdate()
     {
@@ -88,19 +101,6 @@ public class PlayerMovement : MonoBehaviour
             animator.SetTrigger("Jumping");
             //Jump();
         }
-
-        //Atacar
-        timeAttack += Time.deltaTime;
-        if (timeAttack >= timeToNextAttack)
-        {
-            //if (Input.GetButtonDown("Fire1") && movimento == 0)
-            if ((Input.GetKeyDown(KeyCode.Mouse0) && movimento == 0) || (Input.GetKeyDown(KeyCode.LeftControl) && movimento == 0))
-            {
-                timeAttack = 0f;
-                animator.SetTrigger("Attack");
-            }
-        }
-
         //Debugs
         Debug.Log("Animator isGrounded " + animator.GetBool("IsGrounded"));
         Debug.Log("Animator Jumping " + animator.GetBool("Jumping"));
