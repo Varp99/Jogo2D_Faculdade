@@ -302,6 +302,11 @@ MonoBehaviour:
   musicaMenu: {fileID: 8300000, guid: 7e931cbb280af344d922a5bff5f98a4a, type: 3}
   musicaFase1: {fileID: 8300000, guid: 0d0f569a100f718499061d341b6b030b, type: 3}
   fxClick: {fileID: 8300000, guid: cbbb528a63ab49e40945b271fa5102c1, type: 3}
+  fxEspada: {fileID: 8300000, guid: 76aca3cc13794df4ca09488a9c9108ce, type: 3}
+  fxAndar: {fileID: 8300000, guid: 8e48964558b32ac4ca6872e2da28a1bf, type: 3}
+  fxVida: {fileID: 8300000, guid: 3cb05b0eba2293b4b8ae7a67539e2a53, type: 3}
+  fxMoeda: {fileID: 8300000, guid: bf1d8b3ecf4528d4ea04d7ac805b7e6f, type: 3}
+  fxChave: {fileID: 8300000, guid: a5a6beebc9c83844b93d4455fc7f733a, type: 3}
   volumeMaximoMusica: 0
   volumeMaximoFx: 0
 --- !u!4 &1433310035

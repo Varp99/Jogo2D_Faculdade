@@ -8,12 +8,17 @@ public class audioController : MonoBehaviour
     public AudioSource sMusic; // FONTE DE MUSICA
     public AudioSource sFx; // FONTE DE EFEITOS SONOROS
 
-    //musicas
+    [Header("Musicas")]
     public AudioClip musicaMenu;
     public AudioClip musicaFase1;
 
-    //fx
+    [Header("Efeitos Sonoros")]
     public AudioClip fxClick;
+    public AudioClip fxEspada;
+    public AudioClip fxAndar;
+    public AudioClip fxVida;
+    public AudioClip fxMoeda;
+    public AudioClip fxChave;
 
     //Configurações dos audios
     public float volumeMaximoMusica;

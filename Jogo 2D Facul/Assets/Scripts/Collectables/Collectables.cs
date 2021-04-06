@@ -7,7 +7,12 @@ public class Collectables : MonoBehaviour
     private GameObject player;
     private PlayerMovement playerMovement;
     private PlayerHealth playerHealth;
+    private audioController audioController;
 
+    void Start() 
+    {
+        audioController = FindObjectOfType(typeof(audioController)) as audioController;
+    }
     private void OnTriggerEnter2D(Collider2D collision2D)
     {
         if (collision2D.gameObject.CompareTag("Player"))
@@ -23,6 +28,7 @@ public class Collectables : MonoBehaviour
                 if (playerHealth.currentHealth < playerHealth.startingHealth && life >= 1)
                 {
                     playerHealth.currentHealth += 1;
+                    audioController.tocarFx(audioController.fxVida, 1);
                     Destroy(gameObject);
                 }
             }
@@ -30,12 +36,14 @@ public class Collectables : MonoBehaviour
             if (gameObject.CompareTag("Coin"))
             {
                 playerMovement.coin += 1;
+                audioController.tocarFx(audioController.fxMoeda, 1);
                 Destroy(gameObject);
             }
 
             if (gameObject.CompareTag("Key"))
             {
                 playerMovement.key += 1;
+                audioController.tocarFx(audioController.fxChave, 1);
                 Destroy(gameObject);
             }
         }

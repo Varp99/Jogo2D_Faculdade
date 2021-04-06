@@ -13,6 +13,7 @@ public class PlayerMovement : MonoBehaviour
     public int key = 0;
     private bool isGrounded;
     private float movimento;
+    private audioController audioController;
 
     //public int rings;
     //public Text TextLives;
@@ -37,9 +38,9 @@ public class PlayerMovement : MonoBehaviour
     public Transform rayPointGround;
     public RaycastHit2D hitGround;
 
-    [Header("AudioCLips")]
-    public AudioClip playerAttack;
-    public AudioSource audioSource;
+    //[Header("AudioCLips")]
+    //public AudioClip playerAttack;
+    //public AudioSource audioSource;
 
     void Awake()
     {
@@ -48,10 +49,13 @@ public class PlayerMovement : MonoBehaviour
         rigidbody = GetComponent<Rigidbody2D>(); //Definindo Rigidbody2D numa variavel
         sprite = GetComponent<SpriteRenderer>();
         playerHealth = GetComponent<PlayerHealth>();
-        audioSource = GetComponent<AudioSource>();
-        playerAttack = GetComponent<AudioClip>();
+       // audioSource = GetComponent<AudioSource>();
+       // playerAttack = GetComponent<AudioClip>();
     }
-
+    void Start() 
+    {
+        audioController = FindObjectOfType(typeof(audioController)) as audioController;
+    }
     void Update() 
     {
         movimento = Input.GetAxis("Horizontal"); //Definir para andar para a esquerda ou para a direita, eixo x
@@ -65,6 +69,7 @@ public class PlayerMovement : MonoBehaviour
         if (movimento != 0) //Verificação se está andando
         {
             animator.SetBool("Walking", true); //Vai setar a animação booleana walking para true iniciando a animação
+            //audioController.tocarFx(audioController.fxAndar, 1);
         }
         else
         {
@@ -80,6 +85,8 @@ public class PlayerMovement : MonoBehaviour
             {
                 timeAttack = 0f;
                 animator.SetTrigger("Attack");
+                //Toca o som da espada
+                audioController.tocarFx(audioController.fxEspada, 1);
             }
         }
 
@@ -132,7 +139,7 @@ public class PlayerMovement : MonoBehaviour
         Collider2D[] colliders = new Collider2D[3];
         transform.Find("AttackCheck").gameObject.GetComponent<Collider2D>().OverlapCollider(new ContactFilter2D(), colliders);
         EnemyHealth enemyHealth;
-        PlaySound(playerAttack);
+        //PlaySound(playerAttack);
 
         for (int i = 0; i < colliders.Length; i++)
         {
@@ -144,11 +151,11 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void PlaySound(AudioClip clip)
-    {
-        audioSource.clip = clip;
-        audioSource.Play();
-    }
+    //private void PlaySound(AudioClip clip)
+    //{
+        //audioSource.clip = clip;
+        //audioSource.Play();
+    //}
 
     protected virtual RaycastHit2D RaycastGround()
     {
