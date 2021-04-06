@@ -926,7 +926,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 145884921}
         m_TargetAssemblyTypeName: Opcoes, Assembly-CSharp
         m_MethodName: alterarVolumeMusica
         m_Mode: 1
@@ -2323,7 +2323,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 145884921}
         m_TargetAssemblyTypeName: Opcoes, Assembly-CSharp
         m_MethodName: alterarVolumeFX
         m_Mode: 1

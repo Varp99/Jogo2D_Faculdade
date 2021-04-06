@@ -10,6 +10,7 @@ public class PlayerHealth : MonoBehaviour
     public float currentHealth; //Vida atual
     //public Slider healthSlider;
     private SpriteRenderer sprite;
+    private string cenaAtual;
     //public AudioClip deathClip;
     //public float flashSpeed = 5f; //Velocidade para piscar a imagem
     //public Color flashColour = new Color(1f, 0f, 0f, 0.1f); //Red, green, blue, alpha = transparencia
@@ -77,12 +78,13 @@ public class PlayerHealth : MonoBehaviour
 
     IEnumerator AutoRestartLevel()
     {
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(2f);
         RestartLevel();
     }
 
     public void RestartLevel ()
     {
-        SceneManager.LoadScene (1);
+       cenaAtual = SceneManager.GetActiveScene().name;
+       SceneManager.LoadScene (cenaAtual);
     }
 }

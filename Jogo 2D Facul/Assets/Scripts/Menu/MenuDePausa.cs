@@ -9,6 +9,20 @@ public class MenuDePausa : MonoBehaviour
     public GameObject pauseMenu;
     public GameObject Player;
 
+    private void Awake()
+    {
+        if (GameIsPaused)
+        {
+            Resume();
+        }
+        else
+        {
+            //Pause();
+            Verificar();
+            Resume();
+        }
+    }
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -24,6 +38,7 @@ public class MenuDePausa : MonoBehaviour
             }
         }
     }
+
     void Verificar()
     {
         if (Player.activeInHierarchy == true)
@@ -31,6 +46,7 @@ public class MenuDePausa : MonoBehaviour
             Player.SetActive(false);
         }
     }
+
     public void Resume()
     {
         Player.SetActive(true);
@@ -38,16 +54,19 @@ public class MenuDePausa : MonoBehaviour
         Time.timeScale = 1f;
         GameIsPaused = false;
     }
+
     void Pause()
     {
       pauseMenu.SetActive(true);
       Time.timeScale = 0f;
       GameIsPaused = true;
     }
+
     public void CarregaMenu()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
+
     public void FecharJogo()
     {
         Application.Quit();

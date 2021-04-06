@@ -37,33 +37,24 @@ public class PlayerMovement : MonoBehaviour
     public Transform rayPointGround;
     public RaycastHit2D hitGround;
 
-    void Start()
+    [Header("AudioCLips")]
+    public AudioClip playerAttack;
+    public AudioSource audioSource;
+
+    void Awake()
     {
         capsuleCollider = GetComponent<CapsuleCollider2D>(); //Pegando o componete Collider2D
         animator = GetComponent<Animator>(); //Definindo Animator numa variavel
         rigidbody = GetComponent<Rigidbody2D>(); //Definindo Rigidbody2D numa variavel
         sprite = GetComponent<SpriteRenderer>();
         playerHealth = GetComponent<PlayerHealth>();
+        audioSource = GetComponent<AudioSource>();
+        playerAttack = GetComponent<AudioClip>();
     }
+
     void Update() 
     {
-        //Atacar
-        timeAttack += Time.deltaTime;
-        if (timeAttack >= timeToNextAttack)
-        {
-            //if (Input.GetButtonDown("Fire1") && movimento == 0)
-            if ((Input.GetKeyDown(KeyCode.Mouse0) && movimento == 0) || (Input.GetKeyDown(KeyCode.LeftControl) && movimento == 0))
-            {
-                timeAttack = 0f;
-                animator.SetTrigger("Attack");
-            }
-        }
-    }
-    // Update is called once per frame
-    void FixedUpdate()
-    {
         movimento = Input.GetAxis("Horizontal"); //Definir para andar para a esquerda ou para a direita, eixo x
-        rigidbody.velocity = new Vector2(movimento * speed, rigidbody.velocity.y); //Definindo uma velocidade constante para o eixo x e para o eixo y a velocidade fixa
 
         //Movimentar
         if ((movimento > 0 && sprite.flipX == true) || (movimento < 0 && sprite.flipX == false))
@@ -80,7 +71,17 @@ public class PlayerMovement : MonoBehaviour
             animator.SetBool("Walking", false); //Se não vai set a animação booleana walking para false parando a animação
         }
 
-        RaycastGround();
+        //Atacar
+        timeAttack += Time.deltaTime;
+        if (timeAttack >= timeToNextAttack)
+        {
+            //if (Input.GetButtonDown("Fire1") && movimento == 0)
+            if ((Input.GetKeyDown(KeyCode.Mouse0) && movimento == 0) || (Input.GetKeyDown(KeyCode.LeftControl) && movimento == 0))
+            {
+                timeAttack = 0f;
+                animator.SetTrigger("Attack");
+            }
+        }
 
         if (RaycastGround().collider && RaycastGround().collider != null)
         {
@@ -90,9 +91,17 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            isGrounded = false; 
+            isGrounded = false;
             animator.SetBool("IsGrounded", false);
         }
+
+    }
+
+    // Update is called once per frame
+    void FixedUpdate()
+    {
+        rigidbody.velocity = new Vector2(movimento * speed, rigidbody.velocity.y); //Definindo uma velocidade constante para o eixo x e para o eixo y a velocidade fixa
+        RaycastGround();
 
         //Pular
         if (Input.GetKeyDown(KeyCode.Space)) //Pegar a tecla do teclado espaço para pular
@@ -101,6 +110,7 @@ public class PlayerMovement : MonoBehaviour
             animator.SetTrigger("Jumping");
             //Jump();
         }
+
         //Debugs
         Debug.Log("Animator isGrounded " + animator.GetBool("IsGrounded"));
         Debug.Log("Animator Jumping " + animator.GetBool("Jumping"));
@@ -122,6 +132,7 @@ public class PlayerMovement : MonoBehaviour
         Collider2D[] colliders = new Collider2D[3];
         transform.Find("AttackCheck").gameObject.GetComponent<Collider2D>().OverlapCollider(new ContactFilter2D(), colliders);
         EnemyHealth enemyHealth;
+        PlaySound(playerAttack);
 
         for (int i = 0; i < colliders.Length; i++)
         {
@@ -131,6 +142,12 @@ public class PlayerMovement : MonoBehaviour
                 enemyHealth.TakeDamage(attackDamage);
             }
         }
+    }
+
+    private void PlaySound(AudioClip clip)
+    {
+        audioSource.clip = clip;
+        audioSource.Play();
     }
 
     protected virtual RaycastHit2D RaycastGround()

@@ -10,12 +10,13 @@ public class MenuPrincipal : MonoBehaviour
     public AudioClip fxClick;
     private float volumeMaximoFx;
     private float volume;
+
     void Start() {
         audioController = (audioController)FindObjectOfType(typeof(audioController));
     }
     public void MudarCena()
     {
-        string nomeCena = "Mapa 2";
+        string nomeCena = "Mapa_2";
         
         audioController.trocarMusica(audioController.musicaFase1, nomeCena, true);
         //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
