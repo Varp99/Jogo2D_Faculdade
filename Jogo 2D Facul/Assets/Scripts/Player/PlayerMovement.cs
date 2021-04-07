@@ -13,7 +13,6 @@ public class PlayerMovement : MonoBehaviour
     public int key = 0;
     private bool isGrounded;
     private float movimento;
-    private Vector2 currentVelocity;
     private audioController audioController;
 
     //public int rings;
@@ -23,7 +22,8 @@ public class PlayerMovement : MonoBehaviour
     [Header("Components")]
     private Animator animator;
     private CapsuleCollider2D capsuleCollider;
-    private new Rigidbody2D rigidbody;
+    [HideInInspector]
+    public new Rigidbody2D rigidbody;
     private SpriteRenderer sprite;
     private PlayerHealth playerHealth;
 
@@ -90,14 +90,13 @@ public class PlayerMovement : MonoBehaviour
         {
             Jump();
         }
-        animator.SetFloat("VerticalSpeed", currentVelocity.y / jumpForce);
+        animator.SetFloat("VerticalSpeed", rigidbody.velocity.y / jumpForce);
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
         rigidbody.velocity = new Vector2(movimento * speed, rigidbody.velocity.y); //Definindo uma velocidade constante para o eixo x e para o eixo y a velocidade fixa
-        currentVelocity = rigidbody.velocity;
         RaycastGround();
 
         if (RaycastGround().collider && RaycastGround().collider != null)
