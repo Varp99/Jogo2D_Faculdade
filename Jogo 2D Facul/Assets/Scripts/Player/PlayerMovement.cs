@@ -13,6 +13,7 @@ public class PlayerMovement : MonoBehaviour
     public int key = 0;
     private bool isGrounded;
     private float movimento;
+    private Vector2 currentVelocity;
     private audioController audioController;
 
     //public int rings;
@@ -38,10 +39,6 @@ public class PlayerMovement : MonoBehaviour
     public Transform rayPointGround;
     public RaycastHit2D hitGround;
 
-    //[Header("AudioCLips")]
-    //public AudioClip playerAttack;
-    //public AudioSource audioSource;
-
     void Awake()
     {
         capsuleCollider = GetComponent<CapsuleCollider2D>(); //Pegando o componete Collider2D
@@ -49,13 +46,14 @@ public class PlayerMovement : MonoBehaviour
         rigidbody = GetComponent<Rigidbody2D>(); //Definindo Rigidbody2D numa variavel
         sprite = GetComponent<SpriteRenderer>();
         playerHealth = GetComponent<PlayerHealth>();
-       // audioSource = GetComponent<AudioSource>();
-       // playerAttack = GetComponent<AudioClip>();
-    }
-    void Start() 
-    {
         audioController = FindObjectOfType(typeof(audioController)) as audioController;
     }
+
+    void Start() 
+    {
+
+    }
+
     void Update() 
     {
         movimento = Input.GetAxis("Horizontal"); //Definir para andar para a esquerda ou para a direita, eixo x
@@ -80,21 +78,32 @@ public class PlayerMovement : MonoBehaviour
         timeAttack += Time.deltaTime;
         if (timeAttack >= timeToNextAttack)
         {
-            //if (Input.GetButtonDown("Fire1") && movimento == 0)
             if ((Input.GetKeyDown(KeyCode.Mouse0) && movimento == 0) || (Input.GetKeyDown(KeyCode.LeftControl) && movimento == 0))
             {
                 timeAttack = 0f;
                 animator.SetTrigger("Attack");
-                //Toca o som da espada
-                audioController.tocarFx(audioController.fxEspada, 1);
             }
         }
+
+        //Pular
+        if (Input.GetKeyDown(KeyCode.Space)) //Pegar a tecla do teclado espaço para pular
+        {
+            Jump();
+        }
+        animator.SetFloat("VerticalSpeed", currentVelocity.y / jumpForce);
+    }
+
+    // Update is called once per frame
+    void FixedUpdate()
+    {
+        rigidbody.velocity = new Vector2(movimento * speed, rigidbody.velocity.y); //Definindo uma velocidade constante para o eixo x e para o eixo y a velocidade fixa
+        currentVelocity = rigidbody.velocity;
+        RaycastGround();
 
         if (RaycastGround().collider && RaycastGround().collider != null)
         {
             animator.SetBool("IsGrounded", true);
             isGrounded = true;
-            animator.SetBool("Jumping", false);
         }
         else
         {
@@ -102,27 +111,10 @@ public class PlayerMovement : MonoBehaviour
             animator.SetBool("IsGrounded", false);
         }
 
-    }
-
-    // Update is called once per frame
-    void FixedUpdate()
-    {
-        rigidbody.velocity = new Vector2(movimento * speed, rigidbody.velocity.y); //Definindo uma velocidade constante para o eixo x e para o eixo y a velocidade fixa
-        RaycastGround();
-
-        //Pular
-        if (Input.GetKeyDown(KeyCode.Space)) //Pegar a tecla do teclado espaço para pular
-        {
-            if (isGrounded)
-            animator.SetTrigger("Jumping");
-            //Jump();
-        }
-
         //Debugs
-        Debug.Log("Animator isGrounded " + animator.GetBool("IsGrounded"));
-        Debug.Log("Animator Jumping " + animator.GetBool("Jumping"));
-        Debug.Log("Booleana isGrounded " + isGrounded);
-        Debug.Log("RayCast " + RaycastGround().collider);
+        //Debug.Log("Animator isGrounded " + animator.GetBool("IsGrounded"));
+        //Debug.Log("Booleana isGrounded " + isGrounded);
+        //Debug.Log("RayCast " + RaycastGround().collider);
         //Debug.Log("Movimento " + movimento);
         //Debug.Log(RaycastGround().collider);
     }
@@ -139,7 +131,7 @@ public class PlayerMovement : MonoBehaviour
         Collider2D[] colliders = new Collider2D[3];
         transform.Find("AttackCheck").gameObject.GetComponent<Collider2D>().OverlapCollider(new ContactFilter2D(), colliders);
         EnemyHealth enemyHealth;
-        //PlaySound(playerAttack);
+        audioController.tocarFx(audioController.fxEspada, 1);
 
         for (int i = 0; i < colliders.Length; i++)
         {
@@ -150,12 +142,6 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
-
-    //private void PlaySound(AudioClip clip)
-    //{
-        //audioSource.clip = clip;
-        //audioSource.Play();
-    //}
 
     protected virtual RaycastHit2D RaycastGround()
     {
@@ -173,28 +159,16 @@ public class PlayerMovement : MonoBehaviour
 
     private void Jump() //É chamada no evento da animação de pulo
     {
-        //if (isGrounded) //Se estiver no chão
-        //{
+        if (isGrounded) //Se estiver no chão
+        {
             //GetComponent<AudioSource>().Play();
-            isGrounded = false;
-            //animator.SetBool("Jumping", true);
-            animator.SetBool("IsGrounded", false);
             rigidbody.velocity = new Vector2(rigidbody.velocity.x, jumpForce);
-            //Debug.Log(isGrounded);
-        //}
+        }
     }
 
     //Colisão
     void OnCollisionEnter2D(Collision2D collision2D)
     {
-        if (collision2D.gameObject.CompareTag("Plataformas"))
-        {
-            //isGrounded = true;
-            //animator.SetBool("Jumping", false);
-            //animator.SetBool("IsGrounded", true);
-            //GetComponent<Rigidbody2D>().gravityScale = initialGravity;
-        }
-
         if (collision2D.gameObject.CompareTag("Spines"))
         {
             if (playerHealth.currentHealth > 0)
@@ -203,19 +177,10 @@ public class PlayerMovement : MonoBehaviour
             }
             //TextLives.text = lives.ToString();
         }
-
-        /*if (collision2D.gameObject.CompareTag("Trampolim"))
-        {
-            GetComponent<Rigidbody2D>().velocity = new Vector2(0f, 10f);
-        }*/
     }
 
     void OnCollisionExit2D(Collision2D collision2D)
     {
-        if (collision2D.gameObject.CompareTag("Plataformas"))
-        {
-            //isGrounded = false;
-            //animator.SetBool("IsGrounded", false);
-        }
+        
     }
 }

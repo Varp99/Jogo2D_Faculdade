@@ -172,8 +172,6 @@ MonoBehaviour:
     m_Bits: 128
   lenghtGround: 3
   rayPointGround: {fileID: 8124899971279568398}
-  playerAttack: {fileID: 8300000, guid: 76aca3cc13794df4ca09488a9c9108ce, type: 3}
-  audioSource: {fileID: 5938973028088945570}
 --- !u!114 &8124899970418123655
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -467,4 +465,4 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8124899971322397414}
-  m_Enabled: 1
+  m_Enabled: 0
