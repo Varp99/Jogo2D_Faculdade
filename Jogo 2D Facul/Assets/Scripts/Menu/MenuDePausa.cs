@@ -8,6 +8,7 @@ public class MenuDePausa : MonoBehaviour
     public static bool GameIsPaused = false;
     public GameObject pauseMenu;
     public GameObject Player;
+    private string cenaAtual;
 
     private void Awake()
     {
@@ -53,6 +54,12 @@ public class MenuDePausa : MonoBehaviour
         pauseMenu.SetActive(false);
         Time.timeScale = 1f;
         GameIsPaused = false;
+    }
+
+    public void RestartLevel()
+    {
+        cenaAtual = SceneManager.GetActiveScene().name;
+        SceneManager.LoadScene(cenaAtual);
     }
 
     void Pause()

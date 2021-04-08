@@ -14,6 +14,7 @@ public class PlayerMovement : MonoBehaviour
     private bool isGrounded;
     private float movimento;
     private audioController audioController;
+    private bool jump = false;
 
     //public int rings;
     //public Text TextLives;
@@ -21,7 +22,8 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Components")]
     private Animator animator;
-    private CapsuleCollider2D capsuleCollider;
+    [HideInInspector]
+    public CapsuleCollider2D capsuleCollider;
     [HideInInspector]
     public new Rigidbody2D rigidbody;
     private SpriteRenderer sprite;
@@ -35,7 +37,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("RayCast Properties")]
     public LayerMask layerGround;
-    public float lenghtGround;
+    public float lenghtGround = 2.3f;
     public Transform rayPointGround;
     public RaycastHit2D hitGround;
 
@@ -89,7 +91,6 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space)) //Pegar a tecla do teclado espaço para pular
         {
             Jump();
-            audioController.tocarFx(audioController.fxPulo, 1);
         }
         animator.SetFloat("VerticalSpeed", rigidbody.velocity.y / jumpForce);
     }
@@ -111,12 +112,22 @@ public class PlayerMovement : MonoBehaviour
             animator.SetBool("IsGrounded", false);
         }
 
+        if (jump && !isGrounded)
+        {
+            capsuleCollider.offset = new Vector2(capsuleCollider.offset.x, 0.9f);
+            rayPointGround.localPosition = new Vector3(rayPointGround.localPosition.x, 1.99f, rayPointGround.localPosition.z);
+            lenghtGround = 4f;
+            StartCoroutine(JumpTime());
+        }
+
         //Debugs
         //Debug.Log("Animator isGrounded " + animator.GetBool("IsGrounded"));
         //Debug.Log("Booleana isGrounded " + isGrounded);
         //Debug.Log("RayCast " + RaycastGround().collider);
         //Debug.Log("Movimento " + movimento);
         //Debug.Log(RaycastGround().collider);
+        Debug.Log("Jump " + jump);
+        //Debug.Log(jump && isGrounded);
     }
 
     //Funções
@@ -161,8 +172,21 @@ public class PlayerMovement : MonoBehaviour
     {
         if (isGrounded) //Se estiver no chão
         {
-            //GetComponent<AudioSource>().Play();
             rigidbody.velocity = new Vector2(rigidbody.velocity.x, jumpForce);
+            audioController.tocarFx(audioController.fxPulo, 1);
+            jump = true;
+        }
+    }
+
+    IEnumerator JumpTime()
+    {
+        yield return new WaitForSeconds(0.2f);
+        if (jump && isGrounded)
+        {
+            capsuleCollider.offset = new Vector2(capsuleCollider.offset.x, -0.09867489f);
+            rayPointGround.localPosition = new Vector3(rayPointGround.localPosition.x, 1.12f, rayPointGround.localPosition.z);
+            lenghtGround = 3f;
+            jump = false;
         }
     }
 
