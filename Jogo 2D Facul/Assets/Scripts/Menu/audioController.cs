@@ -19,6 +19,9 @@ public class audioController : MonoBehaviour
     public AudioClip fxVida;
     public AudioClip fxMoeda;
     public AudioClip fxChave;
+    public AudioClip fxPulo;
+    public AudioClip fxDanoPlayer;
+    public AudioClip fxEspadaOrc;
 
     //Configurações dos audios
     public float volumeMaximoMusica;

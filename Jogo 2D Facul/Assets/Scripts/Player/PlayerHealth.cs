@@ -10,6 +10,7 @@ public class PlayerHealth : MonoBehaviour
     public float currentHealth; //Vida atual
     //public Slider healthSlider;
     private SpriteRenderer sprite;
+    private audioController audioController;
     private string cenaAtual;
     //public AudioClip deathClip;
     //public float flashSpeed = 5f; //Velocidade para piscar a imagem
@@ -28,6 +29,7 @@ public class PlayerHealth : MonoBehaviour
         playerMovement = GetComponent <PlayerMovement> ();
         currentHealth = startingHealth;
         sprite = GetComponent<SpriteRenderer>();
+        audioController = FindObjectOfType(typeof(audioController)) as audioController;
     }
 
     void Update ()
@@ -49,6 +51,7 @@ public class PlayerHealth : MonoBehaviour
         if(currentHealth <= 0 && !isDead) //Se a vida chegar a 0 e o player ainda estiver vivo dai vai matar o player
         {
             Death ();
+            audioController.tocarFx(audioController.fxDanoPlayer, 1);
         }
     }
 

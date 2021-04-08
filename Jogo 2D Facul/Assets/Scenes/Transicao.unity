@@ -307,6 +307,9 @@ MonoBehaviour:
   fxVida: {fileID: 8300000, guid: 3cb05b0eba2293b4b8ae7a67539e2a53, type: 3}
   fxMoeda: {fileID: 8300000, guid: bf1d8b3ecf4528d4ea04d7ac805b7e6f, type: 3}
   fxChave: {fileID: 8300000, guid: a5a6beebc9c83844b93d4455fc7f733a, type: 3}
+  fxPulo: {fileID: 8300000, guid: 7f08467d28211964bac292fc3876a173, type: 3}
+  fxDanoPlayer: {fileID: 8300000, guid: 0c3a4bbefa7acca4ea179a87140daa8e, type: 3}
+  fxEspadaOrc: {fileID: 8300000, guid: 4bbab5c04522d3b4ba47a400e43aaf4c, type: 3}
   volumeMaximoMusica: 0
   volumeMaximoFx: 0
 --- !u!4 &1433310035

@@ -8,7 +8,7 @@ public class EnemyAttack : MonoBehaviour
     public float distanceAttack;
     protected bool canAttack = false;
     protected float timer;
-
+    private audioController audioController;
     public Transform attackCheck;
     protected PlayerHealth playerHealth;
     protected GameObject player; //Pegar a classe player para detectar a colisão e pegar o tanto de vida do player
@@ -23,6 +23,7 @@ public class EnemyAttack : MonoBehaviour
         playerHealth = player.GetComponent<PlayerHealth>();
         enemyHealth = GetComponent<EnemyHealth>();
         anim = GetComponent <Animator>();
+        audioController = FindObjectOfType(typeof(audioController)) as audioController;
         
         if (gameObject.CompareTag("Orc"))
         {
@@ -61,7 +62,7 @@ public class EnemyAttack : MonoBehaviour
     {
         Collider2D[] colliders = new Collider2D[3];
         transform.Find("AttackCheck").gameObject.GetComponent<Collider2D>().OverlapCollider(new ContactFilter2D(), colliders);
-
+        
         for (int i = 0; i < colliders.Length; i++)
         {
             if (colliders[i] != null && colliders[i].gameObject.CompareTag("Player"))
@@ -84,7 +85,7 @@ public class EnemyAttack : MonoBehaviour
     {
         Collider2D[] colliders = new Collider2D[3];
         transform.Find("AttackCheck").gameObject.GetComponent<Collider2D>().OverlapCollider(new ContactFilter2D(), colliders);
-
+        audioController.tocarFx(audioController.fxEspadaOrc, 1);
         for (int i = 0; i < colliders.Length; i++)
         {
             if (colliders[i] != null && colliders[i].gameObject.CompareTag("Player"))

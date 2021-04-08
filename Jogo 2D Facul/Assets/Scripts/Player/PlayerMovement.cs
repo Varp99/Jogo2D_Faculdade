@@ -89,6 +89,7 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space)) //Pegar a tecla do teclado espaço para pular
         {
             Jump();
+            audioController.tocarFx(audioController.fxPulo, 1);
         }
         animator.SetFloat("VerticalSpeed", rigidbody.velocity.y / jumpForce);
     }
@@ -173,6 +174,7 @@ public class PlayerMovement : MonoBehaviour
             if (playerHealth.currentHealth > 0)
             {
                 playerHealth.currentHealth -= playerHealth.startingHealth;
+                audioController.tocarFx(audioController.fxDanoPlayer, 1);
             }
             //TextLives.text = lives.ToString();
         }
