@@ -51,11 +51,6 @@ public class PlayerMovement : MonoBehaviour
         audioController = FindObjectOfType(typeof(audioController)) as audioController;
     }
 
-    void Start() 
-    {
-
-    }
-
     void Update() 
     {
         movimento = Input.GetAxis("Horizontal"); //Definir para andar para a esquerda ou para a direita, eixo x
@@ -126,7 +121,7 @@ public class PlayerMovement : MonoBehaviour
         //Debug.Log("RayCast " + RaycastGround().collider);
         //Debug.Log("Movimento " + movimento);
         //Debug.Log(RaycastGround().collider);
-        Debug.Log("Jump " + jump);
+        //Debug.Log("Jump " + jump);
         //Debug.Log(jump && isGrounded);
     }
 

@@ -2,14 +2,17 @@
 
 public class EnemyAttack : MonoBehaviour
 {
+    [Header("Enemy Attack")]
     public float timeBetweenAttacks = 0.5f; //Intervalo entre ataques
     private float damage;
     public float attackDamage;
     public float distanceAttack;
     protected bool canAttack = false;
     protected float timer;
-    private audioController audioController;
+
+    [Header("Enemy Components")]
     public Transform attackCheck;
+    private audioController audioController;
     protected PlayerHealth playerHealth;
     protected GameObject player; //Pegar a classe player para detectar a colisão e pegar o tanto de vida do player
     protected Transform playerTransform;
@@ -24,38 +27,17 @@ public class EnemyAttack : MonoBehaviour
         enemyHealth = GetComponent<EnemyHealth>();
         anim = GetComponent <Animator>();
         audioController = FindObjectOfType(typeof(audioController)) as audioController;
-        
-        if (gameObject.CompareTag("Orc"))
-        {
-            damage = attackDamage;
-        }
-
-        if (gameObject.CompareTag("BossOrc"))
-        {
-            damage = attackDamage;
-        }
     }
 
     void Update()
     {
         timer += Time.deltaTime;
-
-        if (gameObject.CompareTag("Orc"))
-        {
-            damage = attackDamage;
-        }
-
-        if (gameObject.CompareTag("BossOrc"))
-        {
-            damage = attackDamage;
-        }
-
-        checkAreaAttack();
+        damage = attackDamage;
     }
 
     private void FixedUpdate()
     {
-        
+        checkAreaAttack();
     }
 
     protected void checkAreaAttack()

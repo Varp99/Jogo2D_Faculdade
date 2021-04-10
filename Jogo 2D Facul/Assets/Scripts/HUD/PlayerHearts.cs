@@ -5,60 +5,90 @@ using UnityEngine.UI;
 
 public class PlayerHearts : MonoBehaviour
 {
-    public float currentHealth;
-    public int numOfHearts;
+    public static PlayerHearts instance;
+    [SerializeField] GameObject heartContainer;
+    [SerializeField] List<GameObject> heartContainerList;
 
-    public Image[] hearts;
-    public Sprite fullHeart;
-    public Sprite halfHeart;
-    public Sprite emptyHeart;
+    [HideInInspector]
+    public int totalHearts;
+    [HideInInspector]
+    public float currentHearts;
+    HearthContainer currentContainer;
 
-    private GameObject player;
-    private PlayerHealth playerHealth;
+    [Range(0, 1)] float fill;
+    [SerializeField] Image fillImage;
 
-    private void Awake()
+    private void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
-        playerHealth = player.GetComponent<PlayerHealth>();
-        numOfHearts = (int)playerHealth.startingHealth;
+        instance = this;
+        heartContainerList = new List<GameObject>();
     }
 
-    private void Update()
+    public void SetupHearts(int heartsIn)
     {
-        currentHealth = playerHealth.currentHealth;
-        int halfLife = (int)currentHealth;
+        heartContainerList.Clear();
 
-        for (int i = 0; i < hearts.Length; i++)
+        for (int i = transform.childCount - 1; i >= 0; i--)
         {
-            /*if (i < currentHealth)
-            {
-                hearts[i].sprite = fullHeart;
-            }*/
-            if (currentHealth > 0 && currentHealth != halfLife) //Metade da vida
-            {
-                hearts[i].sprite = halfHeart;
-            }else if (i < currentHealth && currentHealth == halfLife)
-            {
-                hearts[i].sprite = fullHeart;
-            }
-            else
-            {
-                hearts[i].sprite = emptyHeart;
-            }
-
-            if (i < numOfHearts)
-            {
-                hearts[i].enabled = true;
-            }
-            else
-            {
-                hearts[i].enabled = false;
-            }
-
-            Debug.Log("i = " + i);
-            Debug.Log("health = " + currentHealth);
-            Debug.Log("HalfLife = " + halfLife);
-            //Debug.Log("i < currentHealth && currentHealth != life = " + (i > currentHealth && currentHealth != life));
+            Destroy(transform.GetChild(i).gameObject);
         }
+
+        totalHearts = heartsIn;
+        currentHearts = (float)totalHearts;
+
+        for (int i = 0; i < totalHearts; i++)
+        {
+            GameObject newHeart = Instantiate(heartContainer, transform);
+            heartContainerList.Add(newHeart);
+
+            if (currentContainer != null)
+            {
+                currentContainer.next = newHeart.GetComponent<HearthContainer>();
+            }
+            currentContainer = newHeart.GetComponent<HearthContainer>();
+        }
+        currentContainer = heartContainerList[0].GetComponent<HearthContainer>();
+    }
+
+    public void SetCurrentHealth(float health)
+    {
+        currentHearts = health;
+        currentContainer.SetHearts(currentHearts);
+    }
+
+    public void AddHearts(float healthUp)
+    {
+        currentHearts += healthUp;
+        if (currentHearts > totalHearts)
+        {
+            currentHearts = (float)totalHearts;
+        }
+        currentContainer.SetHearts(currentHearts);
+    }
+
+    public void RemoveHearts(float healthDown)
+    {
+        currentHearts -= healthDown;
+        if (currentHearts < 0)
+        {
+            currentHearts = 0f;
+        }
+        currentContainer.SetHearts(currentHearts);
+    }
+
+    public void AddContainer()
+    {
+        GameObject newHeart = Instantiate(heartContainer, transform);
+        currentContainer = heartContainerList[heartContainerList.Count - 1].GetComponent<HearthContainer>();
+        heartContainerList.Add(newHeart);
+
+        if (currentContainer != null)
+        {
+            currentContainer.next = newHeart.GetComponent<HearthContainer>();
+        }
+        currentContainer = heartContainerList[0].GetComponent<HearthContainer>();
+        totalHearts++;
+        currentHearts = totalHearts;
+        SetCurrentHealth(currentHearts);
     }
 }

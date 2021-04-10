@@ -8,11 +8,14 @@ public class Collectables : MonoBehaviour
     private PlayerMovement playerMovement;
     private PlayerHealth playerHealth;
     private audioController audioController;
+    PlayerHearts playerHearts;
 
     void Start() 
     {
         audioController = FindObjectOfType(typeof(audioController)) as audioController;
+        playerHearts = FindObjectOfType<PlayerHearts>();
     }
+
     private void OnTriggerEnter2D(Collider2D collision2D)
     {
         if (collision2D.gameObject.CompareTag("Player"))
@@ -28,6 +31,7 @@ public class Collectables : MonoBehaviour
                 if (playerHealth.currentHealth < playerHealth.startingHealth && life >= 1)
                 {
                     playerHealth.currentHealth += 1;
+                    //playerHearts.AddHearts(1);
                     audioController.tocarFx(audioController.fxVida, 1);
                     Destroy(gameObject);
                 }

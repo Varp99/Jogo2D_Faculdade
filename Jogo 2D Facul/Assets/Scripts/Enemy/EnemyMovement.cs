@@ -31,7 +31,6 @@ public class EnemyMovement : MonoBehaviour
     protected EnemyHealth enemyHealth;
     protected Animator anim;
     protected EnemyAttack enemyAttack;
-    
 
     private void Awake()
     {
