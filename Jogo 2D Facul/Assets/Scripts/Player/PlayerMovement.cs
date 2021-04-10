@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -13,12 +12,7 @@ public class PlayerMovement : MonoBehaviour
     public int key = 0;
     private bool isGrounded;
     private float movimento;
-    private audioController audioController;
     private bool jump = false;
-
-    //public int rings;
-    //public Text TextLives;
-    //public Text TextRings;
 
     [Header("Components")]
     private Animator animator;
@@ -28,6 +22,7 @@ public class PlayerMovement : MonoBehaviour
     public new Rigidbody2D rigidbody;
     private SpriteRenderer sprite;
     private PlayerHealth playerHealth;
+    private audioController audioController;
 
     [Header("Attack Variables")]
     public Transform attackCheck;
