@@ -20,6 +20,5 @@ public class HearthContainer : MonoBehaviour
         {
             next.SetHearts(count);
         }
-        Debug.Log(count);
     }
 }

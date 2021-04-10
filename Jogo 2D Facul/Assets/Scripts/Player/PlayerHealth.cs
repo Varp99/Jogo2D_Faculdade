@@ -15,7 +15,7 @@ public class PlayerHealth : MonoBehaviour
 
     Animator anim;
     PlayerMovement playerMovement;
-    PlayerHearts playerHearts;
+    //PlayerHearts playerHearts;
     bool isDead;
     bool damaged;
 
@@ -26,8 +26,8 @@ public class PlayerHealth : MonoBehaviour
         currentHealth = startingHealth;
         sprite = GetComponent<SpriteRenderer>();
         audioController = FindObjectOfType(typeof(audioController)) as audioController;
-        playerHearts = FindObjectOfType<PlayerHearts>();
-        playerHearts.SetupHearts((int)startingHealth);
+        //playerHearts = FindObjectOfType<PlayerHearts>();
+        PlayerHearts.instance.SetupHearts((int)startingHealth);
     }
 
     void Update ()
@@ -43,7 +43,7 @@ public class PlayerHealth : MonoBehaviour
         damaged = true;
         StartCoroutine(DamageIndicator());
         currentHealth -= amount; //Vai reduzir a vida de acordo com o dano levado
-        //playerHearts.RemoveHearts(amount);
+        PlayerHearts.instance.RemoveHearts(amount);
 
         if(currentHealth <= 0 && !isDead) //Se a vida chegar a 0 e o player ainda estiver vivo dai vai matar o player
         {
@@ -71,6 +71,7 @@ public class PlayerHealth : MonoBehaviour
         audioController.tocarFx(audioController.fxDanoPlayer, 1);
         isDead = true;
         anim.SetTrigger ("Dead");
+        PlayerHearts.instance.SetCurrentHealth(0f);
         playerMovement.enabled = false;
         StartCoroutine(AutoRestartLevel());
     }

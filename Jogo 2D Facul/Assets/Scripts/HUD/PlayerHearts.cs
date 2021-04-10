@@ -15,10 +15,7 @@ public class PlayerHearts : MonoBehaviour
     public float currentHearts;
     HearthContainer currentContainer;
 
-    [Range(0, 1)] float fill;
-    [SerializeField] Image fillImage;
-
-    private void Start()
+    private void Awake()
     {
         instance = this;
         heartContainerList = new List<GameObject>();
@@ -74,21 +71,5 @@ public class PlayerHearts : MonoBehaviour
             currentHearts = 0f;
         }
         currentContainer.SetHearts(currentHearts);
-    }
-
-    public void AddContainer()
-    {
-        GameObject newHeart = Instantiate(heartContainer, transform);
-        currentContainer = heartContainerList[heartContainerList.Count - 1].GetComponent<HearthContainer>();
-        heartContainerList.Add(newHeart);
-
-        if (currentContainer != null)
-        {
-            currentContainer.next = newHeart.GetComponent<HearthContainer>();
-        }
-        currentContainer = heartContainerList[0].GetComponent<HearthContainer>();
-        totalHearts++;
-        currentHearts = totalHearts;
-        SetCurrentHealth(currentHearts);
     }
 }
