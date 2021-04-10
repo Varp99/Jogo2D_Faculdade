@@ -7,9 +7,7 @@ public class EnemyHealth : MonoBehaviour
     [Header("Enemy Health")]
     public float startingHealth = 3;
     public float currentHealth;
-    public float sinkSpeed = 2.5f; //Velocidade do corpo sumir
     protected bool isDead;
-    protected bool isSinking;
     private bool damaged;
     
     Animator anim;
@@ -23,6 +21,10 @@ public class EnemyHealth : MonoBehaviour
         capsuleCollider = GetComponent<CapsuleCollider2D>();
         sprite = GetComponent<SpriteRenderer>();
         enemyMovement = GetComponent<EnemyMovement>();
+    }
+
+    void Start()
+    {
         currentHealth = startingHealth;
     }
 

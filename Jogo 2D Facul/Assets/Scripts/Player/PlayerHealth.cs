@@ -3,19 +3,17 @@ using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.SceneManagement;
 
-
 public class PlayerHealth : MonoBehaviour
 {
+    [Header("Player Health")]
     public float startingHealth = 5f; //Começar a vida com o valor
     public float currentHealth; //Vida atual
-    //public Slider healthSlider;
     private SpriteRenderer sprite;
     private audioController audioController;
     private string cenaAtual;
 
     Animator anim;
     PlayerMovement playerMovement;
-    //PlayerHearts playerHearts;
     bool isDead;
     bool damaged;
 
@@ -23,10 +21,13 @@ public class PlayerHealth : MonoBehaviour
     {
         anim = GetComponent <Animator> ();
         playerMovement = GetComponent <PlayerMovement> ();
-        currentHealth = startingHealth;
         sprite = GetComponent<SpriteRenderer>();
         audioController = FindObjectOfType(typeof(audioController)) as audioController;
-        //playerHearts = FindObjectOfType<PlayerHearts>();
+    }
+
+    void Start()
+    {
+        currentHealth = startingHealth;
         PlayerHearts.instance.SetupHearts((int)startingHealth);
     }
 

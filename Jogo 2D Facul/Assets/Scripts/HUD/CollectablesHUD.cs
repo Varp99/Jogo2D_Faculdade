@@ -17,6 +17,6 @@ public class CollectablesHUD : MonoBehaviour
 
     public void UpdateKeyHUD(int key)
     {
-        keyTxt.text = key + " Chaves";
+        keyTxt.text = key + " Chave";
     }
 }
