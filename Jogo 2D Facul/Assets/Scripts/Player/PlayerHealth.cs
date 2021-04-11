@@ -8,14 +8,14 @@ public class PlayerHealth : MonoBehaviour
     [Header("Player Health")]
     public float startingHealth = 5f; //Começar a vida com o valor
     public float currentHealth; //Vida atual
-    private SpriteRenderer sprite;
-    private audioController audioController;
     private string cenaAtual;
+    bool damaged;
+    bool isDead;
 
     Animator anim;
     PlayerMovement playerMovement;
-    bool isDead;
-    bool damaged;
+    private SpriteRenderer sprite;
+    private audioController audioController;
 
     void Awake ()
     {
@@ -65,6 +65,7 @@ public class PlayerHealth : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         sprite.color = Color.white;
     }
+
 
     void Death ()
     {

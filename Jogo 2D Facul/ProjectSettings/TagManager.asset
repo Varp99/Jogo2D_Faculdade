@@ -60,11 +60,11 @@ TagManager:
   - name: Ground
     uniqueID: 4152061969
     locked: 0
-  - name: Player
-    uniqueID: 494357787
-    locked: 0
   - name: Enemies
     uniqueID: 1954131865
+    locked: 0
+  - name: Player
+    uniqueID: 494357787
     locked: 0
   - name: Foreground
     uniqueID: 3155969499

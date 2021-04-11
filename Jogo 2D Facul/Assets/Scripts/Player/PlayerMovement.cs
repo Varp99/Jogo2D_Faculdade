@@ -46,7 +46,7 @@ public class PlayerMovement : MonoBehaviour
         audioController = FindObjectOfType(typeof(audioController)) as audioController;
     }
 
-    void Update() 
+    void Update()
     {
         movimento = Input.GetAxis("Horizontal"); //Definir para andar para a esquerda ou para a direita, eixo x
 
@@ -136,7 +136,7 @@ public class PlayerMovement : MonoBehaviour
 
         for (int i = 0; i < colliders.Length; i++)
         {
-            if (colliders[i] != null && colliders[i].gameObject.CompareTag("Orc"))
+            if (colliders[i] != null && (colliders[i].gameObject.CompareTag("Orc") || colliders[i].gameObject.CompareTag("BossOrc")))
             {
                 enemyHealth = colliders[i].GetComponent<EnemyHealth>();
                 enemyHealth.TakeDamage(attackDamage);
@@ -188,14 +188,7 @@ public class PlayerMovement : MonoBehaviour
             if (playerHealth.currentHealth > 0)
             {
                 playerHealth.currentHealth -= playerHealth.startingHealth;
-                audioController.tocarFx(audioController.fxDanoPlayer, 1);
             }
-            //TextLives.text = lives.ToString();
         }
-    }
-
-    void OnCollisionExit2D(Collision2D collision2D)
-    {
-        
     }
 }

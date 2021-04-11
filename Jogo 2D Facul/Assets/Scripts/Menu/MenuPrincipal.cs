@@ -5,30 +5,30 @@ using UnityEngine.SceneManagement;
 
 public class MenuPrincipal : MonoBehaviour
 {   
-   
     private audioController audioController;
-    public AudioClip fxClick;
+    //public AudioClip fxClick;
     private float volumeMaximoFx;
     private float volume;
+    public string nomeCena;
 
     void Start() {
         audioController = (audioController)FindObjectOfType(typeof(audioController));
     }
+
     public void MudarCena()
     {
-        string nomeCena = "Mapa_1";
-        
         audioController.trocarMusica(audioController.musicaFase1, nomeCena, true);
         //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
+
     public void SairJogo()
     {
         Application.Quit();
         Debug.Log("Saiu!");
     }
+
     public void click()
     {
         audioController.tocarFx(audioController.fxClick, 1);
     }
-    
 }

@@ -18,6 +18,7 @@ public class EnemyAttack : MonoBehaviour
     protected Transform playerTransform;
     protected EnemyHealth enemyHealth;
     protected Animator anim;
+    private GameObject enemySoundKill;
 
     void Awake ()
     {
@@ -27,6 +28,7 @@ public class EnemyAttack : MonoBehaviour
         enemyHealth = GetComponent<EnemyHealth>();
         anim = GetComponent <Animator>();
         audioController = FindObjectOfType(typeof(audioController)) as audioController;
+        enemySoundKill = enemyHealth.enemy;
     }
 
     void Update()
@@ -75,6 +77,18 @@ public class EnemyAttack : MonoBehaviour
                 if (playerHealth.currentHealth > 0)
                 {
                     playerHealth.TakeDamage(damage);
+                }
+
+                if (playerHealth.currentHealth <= 0)
+                {
+                    if (enemySoundKill.CompareTag("Orc"))
+                    {
+                        audioController.tocarFx(audioController.fxOrcLaugh, 1);
+                    }
+                    if (enemySoundKill.CompareTag("BossOrc"))
+                    {
+                        audioController.tocarFx(audioController.fxOrcBossLaugh, 1);
+                    }
                 }
             }
             else

@@ -14,6 +14,8 @@ public class EnemyHealth : MonoBehaviour
     CapsuleCollider2D capsuleCollider;
     private SpriteRenderer sprite;
     private EnemyMovement enemyMovement;
+    private audioController audioController;
+    public GameObject enemy;
 
     protected void Awake()
     {
@@ -21,6 +23,7 @@ public class EnemyHealth : MonoBehaviour
         capsuleCollider = GetComponent<CapsuleCollider2D>();
         sprite = GetComponent<SpriteRenderer>();
         enemyMovement = GetComponent<EnemyMovement>();
+        audioController = FindObjectOfType(typeof(audioController)) as audioController;
     }
 
     void Start()
@@ -64,10 +67,20 @@ public class EnemyHealth : MonoBehaviour
 
     protected void Death()
     {
+        if (enemy.CompareTag("Orc"))
+        {
+            audioController.tocarFx(audioController.fxOrcDeath, 1);
+        }
+        if (enemy.CompareTag("BossOrc"))
+        {
+            audioController.tocarFx(audioController.fxOrcBossDeath, 1);
+        }
+
         isDead = true;
         capsuleCollider.isTrigger = true; //Transformar a colisão do inimigo para um trigger para o player passar por cima
         anim.SetTrigger("Dead");
         enemyMovement.enabled = false;
+        GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
         GetComponent<Rigidbody2D>().isKinematic = true;
         Destroy(gameObject, 5f); //Vai destruir o objeto depois de 5 segundos
     }

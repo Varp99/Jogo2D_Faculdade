@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class audioController : MonoBehaviour
 {
+    [Header("Audios Sourcers")]
     public AudioSource sMusic; // FONTE DE MUSICA
     public AudioSource sFx; // FONTE DE EFEITOS SONOROS
 
@@ -22,8 +23,13 @@ public class audioController : MonoBehaviour
     public AudioClip fxPulo;
     public AudioClip fxDanoPlayer;
     public AudioClip fxEspadaOrc;
+    public AudioClip fxOrcDeath;
+    public AudioClip fxOrcBossDeath;
+    public AudioClip fxOrcLaugh;
+    public AudioClip fxOrcBossLaugh;
 
     //Configurações dos audios
+    [Header("Configurações dos audios")]
     public float volumeMaximoMusica;
     public float volumeMaximoFx;
 
@@ -31,6 +37,7 @@ public class audioController : MonoBehaviour
     private AudioClip novaMusica;
     private string novaCena;
     private bool trocarCena;
+
     void Start()
     {
         //Faz o audio controller permanecer entre as cenas
@@ -47,6 +54,7 @@ public class audioController : MonoBehaviour
         volumeMaximoFx = PlayerPrefs.GetFloat("volumeMaximoFx");
         trocarMusica(musicaMenu,"MenuPrincipal",true);
     }
+
     public void trocarMusica(AudioClip clip, string nomeCena, bool mudarCena)
     {
         novaMusica = clip;
@@ -55,6 +63,7 @@ public class audioController : MonoBehaviour
 
         StartCoroutine("changeMusic");
     }
+
     IEnumerator changeMusic()
     {
         //Faz a diminuição do volume da musica
@@ -80,6 +89,7 @@ public class audioController : MonoBehaviour
             SceneManager.LoadScene(novaCena);
         }
     }
+
     public void tocarFx(AudioClip fx, float volume)
     {
         float tempVolume = volume;

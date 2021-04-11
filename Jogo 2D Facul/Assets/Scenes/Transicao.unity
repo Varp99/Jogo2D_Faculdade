@@ -310,6 +310,10 @@ MonoBehaviour:
   fxPulo: {fileID: 8300000, guid: 7f08467d28211964bac292fc3876a173, type: 3}
   fxDanoPlayer: {fileID: 8300000, guid: 0c3a4bbefa7acca4ea179a87140daa8e, type: 3}
   fxEspadaOrc: {fileID: 8300000, guid: 4bbab5c04522d3b4ba47a400e43aaf4c, type: 3}
+  fxOrcDeath: {fileID: 8300000, guid: aead5503fb2ef094898731d978b606f8, type: 3}
+  fxOrcBossDeath: {fileID: 8300000, guid: 5ebd7ff2055a2684da41db3cf0dafa98, type: 3}
+  fxOrcLaugh: {fileID: 8300000, guid: 93e3c072053f505428721a3aa8b07151, type: 3}
+  fxOrcBossLaugh: {fileID: 8300000, guid: f202c556335db4f42ae65eaacf56331c, type: 3}
   volumeMaximoMusica: 0
   volumeMaximoFx: 0
 --- !u!4 &1433310035

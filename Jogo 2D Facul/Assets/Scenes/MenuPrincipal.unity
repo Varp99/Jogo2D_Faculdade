@@ -2555,7 +2555,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d2f2fa32e6d0a4ba0b01f9811ebc87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fxClick: {fileID: 8300000, guid: cbbb528a63ab49e40945b271fa5102c1, type: 3}
+  nomeCena: Mapa_1
 --- !u!4 &1538461010
 Transform:
   m_ObjectHideFlags: 0

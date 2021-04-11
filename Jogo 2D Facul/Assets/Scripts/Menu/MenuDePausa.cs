@@ -18,7 +18,6 @@ public class MenuDePausa : MonoBehaviour
         }
         else
         {
-            //Pause();
             Verificar();
             Resume();
         }
