@@ -16,7 +16,7 @@ public class MenuPrincipal : MonoBehaviour
     }
     public void MudarCena()
     {
-        string nomeCena = "Mapa_2";
+        string nomeCena = "Mapa_1";
         
         audioController.trocarMusica(audioController.musicaFase1, nomeCena, true);
         //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
