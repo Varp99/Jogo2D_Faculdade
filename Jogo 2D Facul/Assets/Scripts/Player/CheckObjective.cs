@@ -12,25 +12,28 @@ public class CheckObjective : MonoBehaviour
     [SerializeField]
     int amountKeyNeed;
 
+    GameController gameController;
+
     void Awake()
     {
         compositeCollider2D = GetComponent<CompositeCollider2D>();
         player = GameObject.FindGameObjectWithTag("Player");
         playerMovement = player.GetComponent<PlayerMovement>();
+        gameController = FindObjectOfType(typeof(GameController)) as GameController;
     }
 
     void OnCollisionEnter2D(Collision2D collision2D)
     {
         if (collision2D.gameObject.CompareTag("Player"))
         {
-            if (playerMovement.coin == amountCoinNeed && playerMovement.key == amountKeyNeed)
+            if (gameController.coin == amountCoinNeed && gameController.key == amountKeyNeed)
             {
                 Debug.Log("Vitoria vc salvou o rei");
                 compositeCollider2D.isTrigger = true;
             }
             else
             {
-                Debug.Log("Não possue as " + amountCoinNeed + " moedas necessárias você tem " + playerMovement.coin + " ou a chave necessaria");
+                Debug.Log("Não possue as " + amountCoinNeed + " moedas necessárias você tem " + gameController.coin + " ou a chave necessaria");
             }
         }
     }

@@ -10,6 +10,15 @@ public class CollectablesHUD : MonoBehaviour
     [SerializeField]
     Text keyTxt;
 
+    GameController gameController;
+
+    private void Awake()
+    {
+        gameController = FindObjectOfType(typeof(GameController)) as GameController;
+        UpdateCoinHUD(gameController.coin);
+        UpdateKeyHUD(gameController.key);
+    }
+
     public void UpdateCoinHUD(int coin)
     {
         coinTxt.text = coin + " Moedas";

@@ -11,12 +11,18 @@ public class Collectables : MonoBehaviour
     private audioController audioController;
     PlayerHearts playerHearts;
     CollectablesHUD collectablesHUD;
+    GameController gameController;
 
     void Start() 
     {
         audioController = FindObjectOfType(typeof(audioController)) as audioController;
-        playerHearts = FindObjectOfType<PlayerHearts>();
+        gameController = FindObjectOfType(typeof(GameController)) as GameController;
+    }
+
+    private void Update()
+    {
         collectablesHUD = FindObjectOfType<CollectablesHUD>();
+        playerHearts = FindObjectOfType<PlayerHearts>();
     }
 
     private void OnTriggerEnter2D(Collider2D collision2D)
@@ -42,16 +48,18 @@ public class Collectables : MonoBehaviour
 
             if (gameObject.CompareTag("Coin"))
             {
-                playerMovement.coin += 1;
-                collectablesHUD.UpdateCoinHUD(playerMovement.coin);
+                //playerMovement.coin += 1;
+                gameController.coin += 1;
+                collectablesHUD.UpdateCoinHUD(gameController.coin);
                 audioController.tocarFx(audioController.fxMoeda, 1);
                 Destroy(gameObject);
             }
 
             if (gameObject.CompareTag("Key"))
             {
-                playerMovement.key += 1;
-                collectablesHUD.UpdateKeyHUD(playerMovement.key);
+                //playerMovement.key += 1;
+                gameController.key += 1;
+                collectablesHUD.UpdateKeyHUD(gameController.key);
                 audioController.tocarFx(audioController.fxChave, 1);
                 Destroy(gameObject);
             }

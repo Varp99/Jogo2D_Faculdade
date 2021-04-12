@@ -21,7 +21,6 @@ public class MenuPrincipal : MonoBehaviour
     public void MudarCena()
     {
         audioController.trocarMusica(audioController.musicaFase1, nomeCena, true);
-        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
     public void SairJogo()

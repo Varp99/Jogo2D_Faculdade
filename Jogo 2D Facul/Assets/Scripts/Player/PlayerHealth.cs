@@ -16,6 +16,7 @@ public class PlayerHealth : MonoBehaviour
     PlayerMovement playerMovement;
     private SpriteRenderer sprite;
     private audioController audioController;
+    GameController gameController;
 
     void Awake ()
     {
@@ -23,12 +24,14 @@ public class PlayerHealth : MonoBehaviour
         playerMovement = GetComponent <PlayerMovement> ();
         sprite = GetComponent<SpriteRenderer>();
         audioController = FindObjectOfType(typeof(audioController)) as audioController;
+        gameController = FindObjectOfType(typeof(GameController)) as GameController;
     }
 
     void Start()
     {
-        currentHealth = startingHealth;
+        currentHealth = gameController.currentHealth;
         PlayerHearts.instance.SetupHearts((int)startingHealth);
+        PlayerHearts.instance.SetCurrentHealth(currentHealth);
     }
 
     void Update ()
@@ -88,5 +91,6 @@ public class PlayerHealth : MonoBehaviour
     {
        cenaAtual = SceneManager.GetActiveScene().name;
        SceneManager.LoadScene (cenaAtual);
+       gameController.currentHealth = startingHealth;
     }
 }

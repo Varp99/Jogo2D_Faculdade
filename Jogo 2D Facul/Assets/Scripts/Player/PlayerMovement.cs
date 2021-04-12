@@ -8,8 +8,6 @@ public class PlayerMovement : MonoBehaviour
     [Header("Movement Variables")]
     public float jumpForce;
     public float speed;
-    public int coin = 0;
-    public int key = 0;
     private bool isGrounded;
     private float movimento;
     private bool jump = false;
