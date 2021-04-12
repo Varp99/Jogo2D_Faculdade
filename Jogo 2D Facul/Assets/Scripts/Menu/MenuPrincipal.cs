@@ -10,9 +10,12 @@ public class MenuPrincipal : MonoBehaviour
     private float volumeMaximoFx;
     private float volume;
     public string nomeCena;
+    private Fade Fade;
 
     void Start() {
         audioController = (audioController)FindObjectOfType(typeof(audioController));
+        Fade = FindObjectOfType(typeof(Fade)) as Fade;
+        Fade.fadeOut();
     }
 
     public void MudarCena()
