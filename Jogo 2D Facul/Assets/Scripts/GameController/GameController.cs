@@ -28,6 +28,8 @@ public class GameController : MonoBehaviour
         DontDestroyOnLoad(this.gameObject);
         collectables_1 = GameObject.Find("Collectables_1");
         collectables_2 = GameObject.Find("Collectables_2");
+        collectables_1.SetActive(false);
+        collectables_2.SetActive(false);
     }
 
     private void Update()
