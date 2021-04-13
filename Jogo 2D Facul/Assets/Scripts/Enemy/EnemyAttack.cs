@@ -7,7 +7,6 @@ public class EnemyAttack : MonoBehaviour
     private float damage;
     public float attackDamage;
     public float distanceAttack;
-    protected bool canAttack = false;
     protected float timer;
 
     [Header("Enemy Components")]
@@ -17,6 +16,7 @@ public class EnemyAttack : MonoBehaviour
     protected GameObject player; //Pegar a classe player para detectar a colisão e pegar o tanto de vida do player
     protected Transform playerTransform;
     protected EnemyHealth enemyHealth;
+    EnemyMovement enemyMovement;
     protected Animator anim;
     private GameObject enemySoundKill;
 
@@ -26,6 +26,7 @@ public class EnemyAttack : MonoBehaviour
         playerTransform = player.GetComponent<Transform>();
         playerHealth = player.GetComponent<PlayerHealth>();
         enemyHealth = GetComponent<EnemyHealth>();
+        enemyMovement = GetComponent<EnemyMovement>();
         anim = GetComponent <Animator>();
         audioController = FindObjectOfType(typeof(audioController)) as audioController;
         enemySoundKill = enemyHealth.enemy;
@@ -33,34 +34,36 @@ public class EnemyAttack : MonoBehaviour
 
     void Update()
     {
-        timer += Time.deltaTime;
         damage = attackDamage;
     }
 
     private void FixedUpdate()
     {
         checkAreaAttack();
+        //Debug.Log(timer);
     }
 
     protected void checkAreaAttack()
     {
         Collider2D[] colliders = new Collider2D[3];
         transform.Find("AttackCheck").gameObject.GetComponent<Collider2D>().OverlapCollider(new ContactFilter2D(), colliders);
-        
+
         for (int i = 0; i < colliders.Length; i++)
         {
             if (colliders[i] != null && colliders[i].gameObject.CompareTag("Player"))
             {
+                timer += Time.deltaTime;
                 if (playerHealth.currentHealth > 0 && timer >= timeBetweenAttacks && enemyHealth.currentHealth > 0f)
                 {
+                    Debug.Log("Atacou em " + timer + " segundos");
                     timer = 0f;
                     anim.SetTrigger("Attack");
-                    canAttack = false;
                 }
             }
-            else
+
+            if (!enemyMovement.isRange)
             {
-                canAttack = false;
+                timer = 0f;
             }
         }
     }

@@ -11,6 +11,8 @@ public class PlayerMovement : MonoBehaviour
     private bool isGrounded;
     private float movimento;
     private bool jump = false;
+    [HideInInspector]
+    public bool flip = false;
 
     [Header("Components")]
     private Animator animator;
@@ -42,6 +44,14 @@ public class PlayerMovement : MonoBehaviour
         sprite = GetComponent<SpriteRenderer>();
         playerHealth = GetComponent<PlayerHealth>();
         audioController = FindObjectOfType(typeof(audioController)) as audioController;
+    }
+
+    private void Start()
+    {
+        if (flip)
+        {
+            Flip();
+        }
     }
 
     void Update()
@@ -104,7 +114,7 @@ public class PlayerMovement : MonoBehaviour
         {
             capsuleCollider.offset = new Vector2(capsuleCollider.offset.x, 0.9f);
             rayPointGround.localPosition = new Vector3(rayPointGround.localPosition.x, 1.99f, rayPointGround.localPosition.z);
-            lenghtGround = 4f;
+            lenghtGround = 6f;
             StartCoroutine(JumpTime());
         }
 

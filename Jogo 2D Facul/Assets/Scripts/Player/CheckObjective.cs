@@ -5,8 +5,6 @@ using UnityEngine;
 public class CheckObjective : MonoBehaviour
 {
     CompositeCollider2D compositeCollider2D;
-    GameObject player;
-    PlayerMovement playerMovement;
     [SerializeField]
     int amountCoinNeed;
     [SerializeField]
@@ -17,8 +15,6 @@ public class CheckObjective : MonoBehaviour
     void Awake()
     {
         compositeCollider2D = GetComponent<CompositeCollider2D>();
-        player = GameObject.FindGameObjectWithTag("Player");
-        playerMovement = player.GetComponent<PlayerMovement>();
         gameController = FindObjectOfType(typeof(GameController)) as GameController;
     }
 
@@ -33,7 +29,18 @@ public class CheckObjective : MonoBehaviour
             }
             else
             {
-                Debug.Log("Não possue as " + amountCoinNeed + " moedas necessárias você tem " + gameController.coin + " ou a chave necessaria");
+                if (gameController.coin < amountCoinNeed && gameController.key == amountKeyNeed)
+                {
+                    Debug.Log("Você não possue as " + amountCoinNeed + " moedas necessárias você tem " + gameController.coin);
+                }
+                else if (gameController.key < amountKeyNeed && gameController.coin == amountCoinNeed)
+                {
+                    Debug.Log("Você não possue a chave necessária");
+                }
+                else
+                {
+                    Debug.Log("Você não possue as " + amountCoinNeed + " moedas necessárias você tem " + gameController.coin + " e você não possue a chave necessária");
+                }
             }
         }
     }

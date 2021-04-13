@@ -13,6 +13,8 @@ public class EnemyMovement : MonoBehaviour
     protected bool isMoving = false;
     protected bool isDead;
     private bool virou = false;
+    [HideInInspector]
+    public bool isRange = false;
 
     [Header("RayCast Properties")]
     public LayerMask layerGround;
@@ -53,10 +55,12 @@ public class EnemyMovement : MonoBehaviour
             if (playerDistance >= playerDistanceMin)
             {
                 isMoving = true;
+                isRange = false;
             }
             else
             {
                 isMoving = false;
+                isRange = true;
             }
 
             if ((playerTransform.position.x > transform.position.x && virou)

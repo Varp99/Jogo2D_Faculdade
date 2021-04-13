@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class Collectables : MonoBehaviour
 {
     private GameObject player;
-    private PlayerMovement playerMovement;
     private PlayerHealth playerHealth;
     private audioController audioController;
     PlayerHearts playerHearts;
@@ -30,7 +29,6 @@ public class Collectables : MonoBehaviour
         if (collision2D.gameObject.CompareTag("Player"))
         {
             player = GameObject.FindGameObjectWithTag("Player");
-            playerMovement = player.GetComponent<PlayerMovement>();
             playerHealth = player.GetComponent<PlayerHealth>();
 
             if (gameObject.CompareTag("Life"))
@@ -48,16 +46,23 @@ public class Collectables : MonoBehaviour
 
             if (gameObject.CompareTag("Coin"))
             {
-                //playerMovement.coin += 1;
                 gameController.coin += 1;
                 collectablesHUD.UpdateCoinHUD(gameController.coin);
                 audioController.tocarFx(audioController.fxMoeda, 1);
                 Destroy(gameObject);
             }
 
+            if (gameObject.CompareTag("BossCoin"))
+            {
+                gameController.coin += 1;
+                collectablesHUD.UpdateCoinHUD(gameController.coin);
+                audioController.tocarFx(audioController.fxMoeda, 1);
+                gameController.pegouMoedaBoss = true;
+                Destroy(gameObject);
+            }
+
             if (gameObject.CompareTag("Key"))
             {
-                //playerMovement.key += 1;
                 gameController.key += 1;
                 collectablesHUD.UpdateKeyHUD(gameController.key);
                 audioController.tocarFx(audioController.fxChave, 1);

@@ -11,6 +11,10 @@ public class GameController : MonoBehaviour
     public int coin = 0;
     public int key = 0;
     string cenaAtual;
+    [HideInInspector]
+    public bool passouMapa = false;
+    //[HideInInspector]
+    public bool pegouMoedaBoss = false;
 
     GameObject player;
     PlayerHealth playerHealth;
@@ -50,7 +54,10 @@ public class GameController : MonoBehaviour
                 collectables_1.SetActive(true);
                 collectables_2.SetActive(false);
             }
+        }
 
+        if (collectables_2 != null)
+        {
             if (cenaAtual == "Mapa_2")
             {
                 collectables_2.SetActive(true);

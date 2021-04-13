@@ -7,8 +7,8 @@ public class MenuPrincipal : MonoBehaviour
 {   
     private audioController audioController;
     //public AudioClip fxClick;
-    private float volumeMaximoFx;
-    private float volume;
+    //private float volumeMaximoFx;
+    //private float volume;
     public string nomeCena;
     private Fade Fade;
 
