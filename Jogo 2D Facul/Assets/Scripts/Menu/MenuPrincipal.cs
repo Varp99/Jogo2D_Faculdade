@@ -33,4 +33,9 @@ public class MenuPrincipal : MonoBehaviour
     {
         audioController.tocarFx(audioController.fxClick, 1);
     }
+    public void RestartLevel()
+    {
+        nomeCena = SceneManager.GetActiveScene().name;
+        SceneManager.LoadScene(nomeCena);
+    }
 }

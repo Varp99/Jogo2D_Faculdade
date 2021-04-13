@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class CheckObjective : MonoBehaviour
 {
     CompositeCollider2D compositeCollider2D;
@@ -9,6 +9,7 @@ public class CheckObjective : MonoBehaviour
     int amountCoinNeed;
     [SerializeField]
     int amountKeyNeed;
+    
 
     GameController gameController;
 
@@ -26,20 +27,21 @@ public class CheckObjective : MonoBehaviour
             {
                 Debug.Log("Vitoria vc salvou o rei");
                 compositeCollider2D.isTrigger = true;
+                SceneManager.LoadScene("TelaVitoria");
             }
             else
             {
                 if (gameController.coin < amountCoinNeed && gameController.key == amountKeyNeed)
                 {
-                    Debug.Log("Você não possue as " + amountCoinNeed + " moedas necessárias você tem " + gameController.coin);
+                    Debug.Log("Vocï¿½ nï¿½o possue as " + amountCoinNeed + " moedas necessï¿½rias vocï¿½ tem " + gameController.coin);
                 }
                 else if (gameController.key < amountKeyNeed && gameController.coin == amountCoinNeed)
                 {
-                    Debug.Log("Você não possue a chave necessária");
+                    Debug.Log("Vocï¿½ nï¿½o possue a chave necessï¿½ria");
                 }
                 else
                 {
-                    Debug.Log("Você não possue as " + amountCoinNeed + " moedas necessárias você tem " + gameController.coin + " e você não possue a chave necessária");
+                    Debug.Log("Vocï¿½ nï¿½o possue as " + amountCoinNeed + " moedas necessï¿½rias vocï¿½ tem " + gameController.coin + " e vocï¿½ nï¿½o possue a chave necessï¿½ria");
                 }
             }
         }
