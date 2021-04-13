@@ -8,6 +8,7 @@ public class Collectables : MonoBehaviour
     private GameObject player;
     private PlayerHealth playerHealth;
     private audioController audioController;
+    EnemySpawnCoin enemySpawnCoin;
     PlayerHearts playerHearts;
     CollectablesHUD collectablesHUD;
     GameController gameController;
@@ -16,6 +17,7 @@ public class Collectables : MonoBehaviour
     {
         audioController = FindObjectOfType(typeof(audioController)) as audioController;
         gameController = FindObjectOfType(typeof(GameController)) as GameController;
+        enemySpawnCoin = GetComponent<EnemySpawnCoin>();
     }
 
     private void Update()
@@ -33,40 +35,52 @@ public class Collectables : MonoBehaviour
 
             if (gameObject.CompareTag("Life"))
             {
-                float life = 0f;
-                life = playerHealth.startingHealth - playerHealth.currentHealth;
-                if (playerHealth.currentHealth < playerHealth.startingHealth && life >= 1)
+                if (collectablesHUD != null)
                 {
-                    playerHealth.currentHealth += 1;
-                    playerHearts.AddHearts(1);
-                    audioController.tocarFx(audioController.fxVida, 1);
-                    Destroy(gameObject);
+                    float life = 0f;
+                    life = playerHealth.startingHealth - playerHealth.currentHealth;
+                    if (playerHealth.currentHealth < playerHealth.startingHealth && life >= 1)
+                    {
+                        playerHealth.currentHealth += 1;
+                        playerHearts.AddHearts(1);
+                        audioController.tocarFx(audioController.fxVida, 1);
+                        Destroy(gameObject);
+                    }
                 }
             }
 
             if (gameObject.CompareTag("Coin"))
             {
-                gameController.coin += 1;
-                collectablesHUD.UpdateCoinHUD(gameController.coin);
-                audioController.tocarFx(audioController.fxMoeda, 1);
-                Destroy(gameObject);
+                if (collectablesHUD != null)
+                {
+                    gameController.coin += 1;
+                    collectablesHUD.UpdateCoinHUD(gameController.coin);
+                    audioController.tocarFx(audioController.fxMoeda, 1);
+                    Destroy(gameObject);
+                }
             }
 
             if (gameObject.CompareTag("BossCoin"))
             {
-                gameController.coin += 1;
-                collectablesHUD.UpdateCoinHUD(gameController.coin);
-                audioController.tocarFx(audioController.fxMoeda, 1);
-                gameController.pegouMoedaBoss = true;
-                Destroy(gameObject);
+                if (collectablesHUD != null)
+                {
+                    gameController.coin += 1;
+                    collectablesHUD.UpdateCoinHUD(gameController.coin);
+                    audioController.tocarFx(audioController.fxMoeda, 1);
+                    gameController.pegouMoedaBoss = true;
+                    Destroy(gameObject);
+                }
             }
 
             if (gameObject.CompareTag("Key"))
             {
-                gameController.key += 1;
-                collectablesHUD.UpdateKeyHUD(gameController.key);
-                audioController.tocarFx(audioController.fxChave, 1);
-                Destroy(gameObject);
+                if (collectablesHUD != null)
+                {
+                    gameController.key += 1;
+                    collectablesHUD.UpdateKeyHUD(gameController.key);
+                    audioController.tocarFx(audioController.fxChave, 1);
+                    Destroy(gameObject);
+                }
             }
         }
     }

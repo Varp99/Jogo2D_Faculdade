@@ -101,4 +101,8 @@ public class audioController : MonoBehaviour
         sFx.PlayOneShot(fx);
     }
 
+    public void AudioControllerDestroy()
+    {
+        Destroy(gameObject);
+    }
 }

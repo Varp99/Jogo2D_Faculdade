@@ -6,21 +6,27 @@ using UnityEngine.SceneManagement;
 public class MenuPrincipal : MonoBehaviour
 {   
     private audioController audioController;
-    //public AudioClip fxClick;
-    //private float volumeMaximoFx;
-    //private float volume;
     public string nomeCena;
     private Fade Fade;
+    GameController gameController;
 
     void Start() {
         audioController = (audioController)FindObjectOfType(typeof(audioController));
         Fade = FindObjectOfType(typeof(Fade)) as Fade;
         Fade.fadeOut();
+        gameController = FindObjectOfType(typeof(GameController)) as GameController;
     }
 
     public void MudarCena()
     {
         audioController.trocarMusica(audioController.musicaFase1, nomeCena, true);
+    }
+
+    public void VoltarMenuPrincipal()
+    {
+        gameController.GameControllerDestroy();
+        audioController.AudioControllerDestroy();
+        SceneManager.LoadScene(nomeCena);
     }
 
     public void SairJogo()
@@ -33,6 +39,7 @@ public class MenuPrincipal : MonoBehaviour
     {
         audioController.tocarFx(audioController.fxClick, 1);
     }
+
     public void RestartLevel()
     {
         nomeCena = SceneManager.GetActiveScene().name;
