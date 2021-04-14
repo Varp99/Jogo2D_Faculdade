@@ -3257,7 +3257,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d2f2fa32e6d0a4ba0b01f9811ebc87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nomeCena: Mapa_1
+  nomeCena: Mapa_2
 --- !u!4 &1538461010
 Transform:
   m_ObjectHideFlags: 0
