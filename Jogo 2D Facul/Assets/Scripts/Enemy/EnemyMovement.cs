@@ -116,7 +116,7 @@ public class EnemyMovement : MonoBehaviour
             }
         }
 
-        //Debug.Log(playerDistance);
+        Debug.Log(playerDistance >= playerDistanceMin);
     }
 
     private void FixedUpdate()
@@ -189,7 +189,13 @@ public class EnemyMovement : MonoBehaviour
                 rigidbody.velocity = new Vector2(horizontalVelocity, rigidbody.velocity.y);
             }
         }
-        else if (isDead)
+        else
+        {
+            anim.SetBool("Walking", false);
+        }
+
+
+        if (isDead)
         {
             rigidbody.velocity = new Vector2(0, 0);
             anim.SetBool("Walking", false);
