@@ -9,14 +9,15 @@ public class CheckObjective : MonoBehaviour
     int amountCoinNeed;
     [SerializeField]
     int amountKeyNeed;
-    
 
+    PlayerDialogo playerDialogo;
     GameController gameController;
 
     void Awake()
     {
         compositeCollider2D = GetComponent<CompositeCollider2D>();
         gameController = FindObjectOfType(typeof(GameController)) as GameController;
+        playerDialogo = FindObjectOfType(typeof(PlayerDialogo)) as PlayerDialogo;
     }
 
     void OnCollisionEnter2D(Collision2D collision2D)
@@ -33,15 +34,18 @@ public class CheckObjective : MonoBehaviour
             {
                 if (gameController.coin < amountCoinNeed && gameController.key == amountKeyNeed)
                 {
-                    Debug.Log("Voc� n�o possue as " + amountCoinNeed + " moedas necess�rias voc� tem " + gameController.coin);
+                    Debug.Log("Você não possue as " + amountCoinNeed + " moedas necessárias você tem " + gameController.coin);
+                    playerDialogo.UpdateText("Você não possue as " + amountCoinNeed + " moedas necessárias você tem " + gameController.coin);
                 }
                 else if (gameController.key < amountKeyNeed && gameController.coin == amountCoinNeed)
                 {
-                    Debug.Log("Voc� n�o possue a chave necess�ria");
+                    Debug.Log("Você não possue a chave necessária");
+                    playerDialogo.UpdateText("Você não possue a chave necessária");
                 }
                 else
                 {
-                    Debug.Log("Voc� n�o possue as " + amountCoinNeed + " moedas necess�rias voc� tem " + gameController.coin + " e voc� n�o possue a chave necess�ria");
+                    Debug.Log("Você não possue as " + amountCoinNeed + " moedas necessárias você tem " + gameController.coin + " e você não possue a chave necessária");
+                    playerDialogo.UpdateText("Você não possue as " + amountCoinNeed + " moedas necessárias você tem " + gameController.coin + " e você não possue a chave necessária");
                 }
             }
         }
