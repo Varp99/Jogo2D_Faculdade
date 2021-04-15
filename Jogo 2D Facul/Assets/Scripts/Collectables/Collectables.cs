@@ -8,22 +8,22 @@ public class Collectables : MonoBehaviour
     private GameObject player;
     private PlayerHealth playerHealth;
     private audioController audioController;
-    EnemySpawnCoin enemySpawnCoin;
     PlayerHearts playerHearts;
     CollectablesHUD collectablesHUD;
     GameController gameController;
+    PlayerDialogo playerDialogo;
 
     void Start() 
     {
         audioController = FindObjectOfType(typeof(audioController)) as audioController;
         gameController = FindObjectOfType(typeof(GameController)) as GameController;
-        enemySpawnCoin = GetComponent<EnemySpawnCoin>();
     }
 
     private void Update()
     {
         collectablesHUD = FindObjectOfType<CollectablesHUD>();
         playerHearts = FindObjectOfType<PlayerHearts>();
+        playerDialogo = FindObjectOfType(typeof(PlayerDialogo)) as PlayerDialogo;
     }
 
     private void OnTriggerEnter2D(Collider2D collision2D)
@@ -45,6 +45,16 @@ public class Collectables : MonoBehaviour
                         playerHearts.AddHearts(1);
                         audioController.tocarFx(audioController.fxVida, 1);
                         Destroy(gameObject);
+                    }else
+                    {
+                        if (playerHealth.currentHealth == playerHealth.startingHealth)
+                        {
+                            playerDialogo.UpdateText("O jogador já está na vida máxima");
+                        }
+                        else
+                        {
+                            playerDialogo.UpdateText("O orbe de coração aumenta em 1 o coração do jogador e falta meio coração para o máximo");
+                        }
                     }
                 }
             }

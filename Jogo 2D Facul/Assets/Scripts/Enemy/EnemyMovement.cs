@@ -116,7 +116,7 @@ public class EnemyMovement : MonoBehaviour
             }
         }
 
-        Debug.Log(playerDistance >= playerDistanceMin);
+        //Debug.Log(playerDistance >= playerDistanceMin);
     }
 
     private void FixedUpdate()

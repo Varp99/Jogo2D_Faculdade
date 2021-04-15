@@ -8,11 +8,12 @@ public class PlayerMovement : MonoBehaviour
     [Header("Movement Variables")]
     public float jumpForce;
     public float speed;
-    private bool isGrounded;
+    private bool isGrounded = false;
     private float movimento;
     private bool jump = false;
     [HideInInspector]
     public bool flip = false;
+    bool isMoving = false;
 
     [Header("Components")]
     private Animator animator;
@@ -67,11 +68,24 @@ public class PlayerMovement : MonoBehaviour
         if (movimento != 0) //Verificação se está andando
         {
             animator.SetBool("Walking", true); //Vai setar a animação booleana walking para true iniciando a animação
-            //audioController.tocarFx(audioController.fxAndar, 1);
+            isMoving = true;
         }
         else
         {
             animator.SetBool("Walking", false); //Se não vai set a animação booleana walking para false parando a animação
+            isMoving = false;
+        }
+
+        if (isMoving && isGrounded) //Verificação se está andando
+        {
+            if (!audioController.sFx.isPlaying)
+            {
+                audioController.tocarFx(audioController.fxAndar, 1);
+            }
+        }
+        else
+        {
+            audioController.sFx.Stop();
         }
 
         //Atacar
@@ -128,6 +142,11 @@ public class PlayerMovement : MonoBehaviour
         //Debug.Log(jump && isGrounded);
     }
 
+    public void PlayerFootStepsSound()
+    {
+        //audioController.tocarFx(audioController.fxAndar, 1);
+    }
+
     //Funções
     void Flip()
     {
@@ -166,7 +185,7 @@ public class PlayerMovement : MonoBehaviour
         return hitGround;
     }
 
-    private void Jump() //É chamada no evento da animação de pulo
+    private void Jump()
     {
         if (isGrounded) //Se estiver no chão
         {

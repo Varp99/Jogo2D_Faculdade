@@ -23,14 +23,14 @@ public class TransicaoCena : MonoBehaviour
         {
             if (cenaDestino == "Mapa_2") //Do mapa 1 para o mapa 2
             {
-                player.transform.position = new Vector3((float)200.43, (float)-50.61, player.transform.position.z);
+                player.transform.position = new Vector3(200.43f, -50.61f, player.transform.position.z);
                 playerMovement.flip = true;
                 gameController.passouMapa = false;
             }
 
             if (cenaDestino == "Mapa_1") //Do mapa 2 para o mapa 1
             {
-                player.transform.position = new Vector3((float)-43.33, (float)9.5, player.transform.position.z);
+                player.transform.position = new Vector3(-43.33f, 9.5f, player.transform.position.z);
                 gameController.passouMapa = false;
             }
         }
