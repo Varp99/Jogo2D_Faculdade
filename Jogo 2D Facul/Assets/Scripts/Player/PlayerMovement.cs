@@ -13,7 +13,6 @@ public class PlayerMovement : MonoBehaviour
     private bool jump = false;
     [HideInInspector]
     public bool flip = false;
-    bool isMoving = false;
 
     [Header("Components")]
     private Animator animator;
@@ -68,25 +67,11 @@ public class PlayerMovement : MonoBehaviour
         if (movimento != 0) //Verificação se está andando
         {
             animator.SetBool("Walking", true); //Vai setar a animação booleana walking para true iniciando a animação
-            isMoving = true;
         }
         else
         {
             animator.SetBool("Walking", false); //Se não vai set a animação booleana walking para false parando a animação
-            isMoving = false;
         }
-
-       /* if (isMoving && isGrounded) //Verificação se está andando
-        {
-            if (!audioController.sFx.isPlaying)
-            {
-                audioController.tocarFx(audioController.fxAndar, 1);
-            }
-        }
-        else
-        {
-            audioController.sFx.Stop();
-        }*/
 
         //Atacar
         timeAttack += Time.deltaTime;
@@ -140,11 +125,6 @@ public class PlayerMovement : MonoBehaviour
         //Debug.Log(RaycastGround().collider);
         //Debug.Log("Jump " + jump);
         //Debug.Log(jump && isGrounded);
-    }
-
-    public void PlayerFootStepsSound()
-    {
-        //audioController.tocarFx(audioController.fxAndar, 1);
     }
 
     //Funções

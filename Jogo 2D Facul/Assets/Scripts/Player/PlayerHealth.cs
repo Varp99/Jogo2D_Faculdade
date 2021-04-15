@@ -77,6 +77,7 @@ public class PlayerHealth : MonoBehaviour
         isDead = true;
         anim.SetTrigger ("Dead");
         PlayerHearts.instance.SetCurrentHealth(0f);
+        Debug.Log(playerMovement.rigidbody.sharedMaterial);
         playerMovement.enabled = false;
         StartCoroutine(AutoRestartLevel());
     }
