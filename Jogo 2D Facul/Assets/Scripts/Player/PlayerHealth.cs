@@ -77,7 +77,7 @@ public class PlayerHealth : MonoBehaviour
         isDead = true;
         anim.SetTrigger ("Dead");
         PlayerHearts.instance.SetCurrentHealth(0f);
-        Debug.Log(playerMovement.rigidbody.sharedMaterial);
+        playerMovement.rigidbody.sharedMaterial = null; //Retira o physics Material 2D do player
         playerMovement.enabled = false;
         StartCoroutine(AutoRestartLevel());
     }
