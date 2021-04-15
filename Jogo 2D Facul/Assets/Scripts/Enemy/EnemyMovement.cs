@@ -194,7 +194,6 @@ public class EnemyMovement : MonoBehaviour
             anim.SetBool("Walking", false);
         }
 
-
         if (isDead)
         {
             rigidbody.velocity = new Vector2(0, 0);

@@ -13,7 +13,7 @@ public class GameController : MonoBehaviour
     string cenaAtual;
     [HideInInspector]
     public bool passouMapa = false;
-    //[HideInInspector]
+    [HideInInspector]
     public bool pegouMoedaBoss = false;
 
     GameObject player;

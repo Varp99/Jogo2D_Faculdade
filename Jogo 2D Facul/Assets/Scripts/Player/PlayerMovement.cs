@@ -76,7 +76,7 @@ public class PlayerMovement : MonoBehaviour
             isMoving = false;
         }
 
-        if (isMoving && isGrounded) //Verificação se está andando
+       /* if (isMoving && isGrounded) //Verificação se está andando
         {
             if (!audioController.sFx.isPlaying)
             {
@@ -86,7 +86,7 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             audioController.sFx.Stop();
-        }
+        }*/
 
         //Atacar
         timeAttack += Time.deltaTime;

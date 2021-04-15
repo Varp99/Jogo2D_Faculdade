@@ -1,10 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+
 public class CheckObjective : MonoBehaviour
 {
-    CompositeCollider2D compositeCollider2D;
     [SerializeField]
     int amountCoinNeed;
     [SerializeField]
@@ -12,12 +11,13 @@ public class CheckObjective : MonoBehaviour
 
     PlayerDialogo playerDialogo;
     GameController gameController;
+    TransicaoCena transicaoCena;
 
     void Awake()
     {
-        compositeCollider2D = GetComponent<CompositeCollider2D>();
         gameController = FindObjectOfType(typeof(GameController)) as GameController;
         playerDialogo = FindObjectOfType(typeof(PlayerDialogo)) as PlayerDialogo;
+        transicaoCena = FindObjectOfType(typeof(TransicaoCena)) as TransicaoCena;
     }
 
     void OnCollisionEnter2D(Collision2D collision2D)
@@ -27,8 +27,7 @@ public class CheckObjective : MonoBehaviour
             if (gameController.coin == amountCoinNeed && gameController.key == amountKeyNeed)
             {
                 Debug.Log("Vitoria vc salvou o rei");
-                compositeCollider2D.isTrigger = true;
-                SceneManager.LoadScene("TelaVitoria");
+                transicaoCena.MudarCena("TelaVitoria");
             }
             else
             {

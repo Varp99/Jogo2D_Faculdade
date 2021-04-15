@@ -44,6 +44,12 @@ public class TransicaoCena : MonoBehaviour
         }
     }
 
+    public void MudarCena(string cena)
+    {
+        cenaDestino = cena;
+        StartCoroutine("mudancaCena");
+    }
+
     IEnumerator mudancaCena()
     {
         Fade.fadeIn();
