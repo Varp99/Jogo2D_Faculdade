@@ -7,8 +7,9 @@ public class MenuDePausa : MonoBehaviour
 {
     public static bool GameIsPaused = false;
     public GameObject pauseMenu;
-    public GameObject Player;
+    public GameObject player;
     private string cenaAtual;
+    PlayerHealth playerHealth;
 
     private void Awake()
     {
@@ -23,9 +24,14 @@ public class MenuDePausa : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        playerHealth = player.GetComponent<PlayerHealth>();
+    }
+
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && playerHealth.currentHealth > 0)
         {
             if (GameIsPaused)
             {
@@ -41,15 +47,15 @@ public class MenuDePausa : MonoBehaviour
 
     void Verificar()
     {
-        if (Player.activeInHierarchy == true)
+        if (player.activeInHierarchy == true)
         {
-            Player.SetActive(false);
+            player.SetActive(false);
         }
     }
 
     public void Resume()
     {
-        Player.SetActive(true);
+        player.SetActive(true);
         pauseMenu.SetActive(false);
         Time.timeScale = 1f;
         GameIsPaused = false;
